@@ -14,11 +14,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\DEPI\\Artist-Recruitment-Website\\Models\\Models.csproj",
+      "projectUniqueName": "D:\\Artist-Recruitment-Website\\Models\\Models.csproj",
       "projectName": "Models",
-      "projectPath": "D:\\DEPI\\Artist-Recruitment-Website\\Models\\Models.csproj",
+      "projectPath": "D:\\Artist-Recruitment-Website\\Models\\Models.csproj",
       "packagesPath": "C:\\Users\\bibos\\.nuget\\packages\\",
-      "outputPath": "D:\\DEPI\\Artist-Recruitment-Website\\Models\\obj\\",
+      "outputPath": "D:\\Artist-Recruitment-Website\\Models\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
