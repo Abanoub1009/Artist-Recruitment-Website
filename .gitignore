@@ -1,0 +1,19 @@
+# Ignore Visual Studio temporary files, build results, and
+# user-specific files
+.vs/
+*.user
+*.suo
+
+# Ignore build results
+bin/
+obj/
+
+# Ignore packages
+*.nupkg
+packages/
+*.snupkg
+
+# Others
+*.log
+*.DS_Store
+*.vscode/
