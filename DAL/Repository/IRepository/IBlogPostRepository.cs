@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DAL.Repository
+namespace DAL.Repository.IRepository
 {
-    public class ApplicationRepository
+    public class IBlogPostRepository
     {
     }
 }
