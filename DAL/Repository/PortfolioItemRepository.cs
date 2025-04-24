@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DAL.Repository.IRepository
+namespace DAL.Repository
 {
-    public interface IMessageRepository
+    public class PortfolioItemRepository
     {
     }
 }
