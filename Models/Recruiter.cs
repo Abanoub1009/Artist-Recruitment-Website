@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Models
 {
-    public class Recruiter
+    public class RecruiterProfile
     {
         public int RecruiterId { get; set; }
         [MaxLength(1000)]
