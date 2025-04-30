@@ -34,7 +34,7 @@ namespace Models
         public string CoverIamge { get; set; }
         [Required]
         public string UserId { get; set; }
-        public ApplicationUser User { get; set; }
+        public User User { get; set; }
         public List<PortfolioItem> portfolioItems { get; set; }
 
     }

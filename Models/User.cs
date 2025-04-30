@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Models
 {
-    public class ApplicationUser : IdentityUser
+    public class User : IdentityUser
     {
         [Required, MaxLength(100)]
         public string FullName { get; set; }
