@@ -7,19 +7,15 @@ using System.Threading.Tasks;
 
 namespace Models
 {
-    public class ArtistProfile
+    public class Recruiter
     {
-        public int ArtistProfileId { get; set; }
+        public int RecruiterId { get; set; }
         [MaxLength(1000)]
         public string Bio { get; set; }
         [MaxLength(500)]
         public string Skills { get; set; }
         public string Location { get; set; }
         public bool IsAvailable { get; set; }
-        [Range(50, 250)]
-        public int? HeightInCm { get; set; }
-        [Range(30, 200)]
-        public int? WeightInKg { get; set; }
         [Url]
         public string YoutubeLink { get; set; }
         [Url]
@@ -36,6 +32,5 @@ namespace Models
         public string UserId { get; set; }
         public ApplicationUser User { get; set; }
         public List<PortfolioItem> portfolioItems { get; set; }
-
     }
 }

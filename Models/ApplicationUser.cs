@@ -22,5 +22,6 @@ namespace Models
         [DataType(DataType.Date)]
         public DateTime? DateOfBirth { get; set; }
         public virtual ArtistProfile ArtistProfile { get; set; }
+        public virtual Recruiter RecruiterProfile { get; set; }
     }
 }
