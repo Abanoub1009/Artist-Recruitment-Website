@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace Models
 {
-    class UserRole
+    public class UserRole
     {
+        public User User { get; set; }
+
     }
 }
