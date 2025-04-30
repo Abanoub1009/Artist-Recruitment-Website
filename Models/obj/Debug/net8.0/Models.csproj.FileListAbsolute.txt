@@ -1,0 +1,13 @@
+D:\Artist-Recruitment-Website\Models\bin\Debug\net8.0\Models.deps.json
+D:\Artist-Recruitment-Website\Models\bin\Debug\net8.0\Models.dll
+D:\Artist-Recruitment-Website\Models\bin\Debug\net8.0\Models.pdb
+D:\Artist-Recruitment-Website\Models\obj\Debug\net8.0\Models.csproj.AssemblyReference.cache
+D:\Artist-Recruitment-Website\Models\obj\Debug\net8.0\Models.GeneratedMSBuildEditorConfig.editorconfig
+D:\Artist-Recruitment-Website\Models\obj\Debug\net8.0\Models.AssemblyInfoInputs.cache
+D:\Artist-Recruitment-Website\Models\obj\Debug\net8.0\Models.AssemblyInfo.cs
+D:\Artist-Recruitment-Website\Models\obj\Debug\net8.0\Models.csproj.CoreCompileInputs.cache
+D:\Artist-Recruitment-Website\Models\obj\Debug\net8.0\Models.sourcelink.json
+D:\Artist-Recruitment-Website\Models\obj\Debug\net8.0\Models.dll
+D:\Artist-Recruitment-Website\Models\obj\Debug\net8.0\refint\Models.dll
+D:\Artist-Recruitment-Website\Models\obj\Debug\net8.0\Models.pdb
+D:\Artist-Recruitment-Website\Models\obj\Debug\net8.0\ref\Models.dll
