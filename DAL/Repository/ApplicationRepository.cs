@@ -8,5 +8,6 @@ namespace DAL.Repository
 {
     public class ApplicationRepository
     {
+
     }
 }

@@ -31,6 +31,6 @@ namespace Models
         [Required]
         public string UserId { get; set; }
         public ApplicationUser User { get; set; }
-        public List<PortfolioItem> portfolioItems { get; set; }
+        public ICollection<PortfolioItem> portfolioItems { get; set; }
     }
 }
