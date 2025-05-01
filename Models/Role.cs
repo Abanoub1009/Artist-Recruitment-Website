@@ -8,5 +8,6 @@ namespace Models
 {
     public class Role
     {
+        public ICollection<UserRole> UsersRole { get; set; }
     }
 }

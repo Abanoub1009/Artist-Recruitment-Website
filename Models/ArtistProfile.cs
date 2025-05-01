@@ -32,10 +32,14 @@ namespace Models
         public string ProfileImage { get; set; }
         [Url]
         public string CoverIamge { get; set; }
+
+
         [Required]
         public string UserId { get; set; }
         public User User { get; set; }
         public List<PortfolioItem> portfolioItems { get; set; }
+/*        public List<Application> applications { get; set; }
+*/
 
     }
 }

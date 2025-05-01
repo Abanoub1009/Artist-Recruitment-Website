@@ -14,6 +14,8 @@ namespace Models
         public int PostedBy { get; set; } // FK to Admin (User)
         public DateTime PostedAt { get; set; }
 
+
+        public User User { get; set; }
         
     }
 }
