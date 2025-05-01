@@ -1,7 +1,6 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using Artist_Recruitment_Website.Models;
-
+using Models.Entities;
 namespace Artist_Recruitment_Website.Controllers;
 
 public class HomeController : Controller

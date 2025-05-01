@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Models
+namespace Models.Models
 {
     public class BlogPost
     {
@@ -14,6 +14,6 @@ namespace Models
         public int PostedBy { get; set; } // FK to Admin (User)
         public DateTime PostedAt { get; set; }
 
-        
+
     }
 }
