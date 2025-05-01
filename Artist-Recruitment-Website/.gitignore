@@ -1,19 +1,107 @@
-# Ignore Visual Studio temporary files, build results, and
-# user-specific files
-.vs/
-*.user
-*.suo
-
-# Ignore build results
+## Build results
 bin/
 obj/
 
-# Ignore packages
-*.nupkg
-packages/
-*.snupkg
+## Rider
+.idea/
 
-# Others
+## VS Code
+.vscode/
+
+## User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+## Mono Auto Generated Files
+mono_crash.*
+
+## OS generated files
+.DS_Store
+Thumbs.db
+
+## Logs
 *.log
-*.DS_Store
-*.vscode/
+
+## Visual Studio
+.vs/
+*.v2
+
+## ASP.NET Scaffolding
+ScaffoldingReadMe.txt
+
+## dotnet watch
+**/node_modules/
+**/dist/
+
+## ASP.NET Core Secrets
+secrets.json
+
+## Others
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+## IIS Express
+.vs/
+*.iis*
+
+## NuGet
+*.nupkg
+*.snupkg
+.nuget/
+packages/
+*.nuspec
+*.psmdcp
+
+## Entity Framework Migrations (optional)
+Migrations/
+
+## Build artifacts
+*.dll
+*.exe
+*.cache
+*.pdb
+*.mdb
+
+## Coverage and test results
+TestResults/
+coverage/
+
+## JetBrains Rider
+.idea/
+
+## Resharper
+_ReSharper*/
+*.[Rr]e[Ss]harper
+
+## Backup & logs
+*.bak
+*.log
+
+## Temporary files
+*.tmp
+*.temp
+*.cache
+*.swp
+*.swo
+
+## Windows image file caches
+ehthumbs.db
+ehthumbs_vista.db
+
+## Windows Installer files
+*.cab
+*.msi
+*.msm
+*.msp
+
+## dotCover
+*.dcvr
+
+## LocalDB
+*.mdf
+*.ldf
+
+# End of file
