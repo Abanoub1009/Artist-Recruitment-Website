@@ -1,13 +1,14 @@
-﻿using Models;
+﻿using DAL.Repository.IRepository;
+using Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DAL.Repository.IRepository
+namespace DAL.Repository
 {
-    public interface IApplicationRepository : IRepository<Application>
+    public interface IUserRepository : IRepository<User>
     {
     }
 }
