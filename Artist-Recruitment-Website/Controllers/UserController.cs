@@ -50,7 +50,7 @@ namespace Artist_Recruitment_Website.Controllers
 
         public async Task<IActionResult> Edit(int id, User user)
         {
-            if (id != Convert.ToInt32(user.Id))
+            if (id != user.Id)
                 return BadRequest();
 
             if (!ModelState.IsValid)

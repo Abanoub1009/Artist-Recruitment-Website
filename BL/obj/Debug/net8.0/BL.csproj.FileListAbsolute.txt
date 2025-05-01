@@ -28,3 +28,5 @@ D:\Artist-Recruitment-Website\BL\bin\Debug\net8.0\DAL.pdb
 D:\Artist-Recruitment-Website\BL\bin\Debug\net8.0\Models.pdb
 D:\Artist-Recruitment-Website\BL\obj\Debug\net8.0\BL.csproj.AssemblyReference.cache
 D:\Artist-Recruitment-Website\BL\obj\Debug\net8.0\BL.csproj.Up2Date
+D:\Artist-Recruitment-Website\BL\bin\Debug\net8.0\BL.runtimeconfig.json
+D:\Artist-Recruitment-Website\BL\obj\Debug\net8.0\BL.genruntimeconfig.cache

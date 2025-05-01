@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,7 +10,7 @@ namespace Models
     public class JobPost
     {
 
-
+        [Key]
         public int JobPostId { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
@@ -24,10 +25,10 @@ namespace Models
 
 
 
-        public Application Application { get; set; }
-        public Application ApplicationId { get; set; }
+        public virtual Application Application { get; set; }
+        
 
-        public RecruiterProfile Profile { get; set; }
-        public int RecruiterId { get; set; }
+        public virtual RecruiterProfile RecruiterProfile { get; set; }
+        public int RecruiterProfileId { get; set; }
     }
 }
