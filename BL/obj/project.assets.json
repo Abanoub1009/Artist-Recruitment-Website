@@ -1917,8 +1917,7 @@
   },
   "projectFileDependencyGroups": {
     "net8.0": [
-      "DAL >= 1.0.0",
-      "Models >= 1.0.0"
+      "DAL >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -1956,9 +1955,6 @@
           "projectReferences": {
             "D:\\Artist-Recruitment-Website\\DAL\\DAL.csproj": {
               "projectPath": "D:\\Artist-Recruitment-Website\\DAL\\DAL.csproj"
-            },
-            "D:\\Artist-Recruitment-Website\\Models\\Models.csproj": {
-              "projectPath": "D:\\Artist-Recruitment-Website\\Models\\Models.csproj"
             }
           }
         }

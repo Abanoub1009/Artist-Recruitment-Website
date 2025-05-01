@@ -1,17 +1,18 @@
-using System.Threading.Tasks.Dataflow;
 using BL.Services;
 using BL.Services.Interface;
-using DAL.Data;
 using DAL.Repository;
 using DAL.Repository.IRepository;
+using System.Threading.Tasks.Dataflow;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddScoped<IApplicationRepository, ApplicationRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IApplicationService, ApplicationService>();
+builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddControllersWithViews();
-builder.Services.AddDbContext<AppDbContext>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

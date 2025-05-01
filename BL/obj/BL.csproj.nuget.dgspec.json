@@ -35,9 +35,6 @@
             "projectReferences": {
               "D:\\Artist-Recruitment-Website\\DAL\\DAL.csproj": {
                 "projectPath": "D:\\Artist-Recruitment-Website\\DAL\\DAL.csproj"
-              },
-              "D:\\Artist-Recruitment-Website\\Models\\Models.csproj": {
-                "projectPath": "D:\\Artist-Recruitment-Website\\Models\\Models.csproj"
               }
             }
           }

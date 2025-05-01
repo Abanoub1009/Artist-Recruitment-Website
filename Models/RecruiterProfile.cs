@@ -32,5 +32,7 @@ namespace Models
         public string UserId { get; set; }
         public User User { get; set; }
         public ICollection<PortfolioItem> portfolioItems { get; set; }
+        public ICollection<JobPost> JobPosts { get; set; }
+
     }
 }

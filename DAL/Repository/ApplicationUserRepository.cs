@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Models
+namespace DAL.Repository
 {
-    public class Role
+    public class ApplicationUserRepository
     {
-        public ICollection<UserRole> UsersRole { get; set; }
     }
 }
