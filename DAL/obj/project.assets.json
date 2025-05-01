@@ -1903,23 +1903,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\bibos\\.nuget\\packages\\": {},
+    "C:\\Users\\Ola\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Artist-Recruitment-Website\\DAL\\DAL.csproj",
+      "projectUniqueName": "C:\\Users\\Ola\\Documents\\Artist-Recruitment-Website\\DAL\\DAL.csproj",
       "projectName": "DAL",
-      "projectPath": "D:\\Artist-Recruitment-Website\\DAL\\DAL.csproj",
-      "packagesPath": "C:\\Users\\bibos\\.nuget\\packages\\",
-      "outputPath": "D:\\Artist-Recruitment-Website\\DAL\\obj\\",
+      "projectPath": "C:\\Users\\Ola\\Documents\\Artist-Recruitment-Website\\DAL\\DAL.csproj",
+      "packagesPath": "C:\\Users\\Ola\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Ola\\Documents\\Artist-Recruitment-Website\\DAL\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\bibos\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Ola\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -1928,15 +1928,14 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "D:\\Artist-Recruitment-Website\\Models\\Models.csproj": {
-              "projectPath": "D:\\Artist-Recruitment-Website\\Models\\Models.csproj"
+            "C:\\Users\\Ola\\Documents\\Artist-Recruitment-Website\\Models\\Models.csproj": {
+              "projectPath": "C:\\Users\\Ola\\Documents\\Artist-Recruitment-Website\\Models\\Models.csproj"
             }
           }
         }
