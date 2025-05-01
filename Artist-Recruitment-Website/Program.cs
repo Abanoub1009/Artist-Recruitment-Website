@@ -1,5 +1,12 @@
+using BL.Services;
+using BL.Services.Interface;
+using DAL.Repository;
+using DAL.Repository.IRepository;
+
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddScoped<IApplicationRepository, ApplicationRepository>();
+builder.Services.AddScoped<IApplicationService, ApplicationService>();
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
