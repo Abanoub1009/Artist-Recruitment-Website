@@ -1,38 +1,53 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Models
 {
     public class RecruiterProfile
     {
-        public int RecruiterId { get; set; }
+        [Key]
+        public int RecruiterProfileId { get; set; }
+
         [MaxLength(1000)]
         public string Bio { get; set; }
+
         [MaxLength(500)]
         public string Skills { get; set; }
+
         public string Location { get; set; }
+
         public bool IsAvailable { get; set; }
+
         [Url]
         public string YoutubeLink { get; set; }
+
         [Url]
-        public string InstgramLink { get; set; }
+        public string InstagramLink { get; set; }
+
         [Url]
         public string FacebookLink { get; set; }
+
         [Url]
         public string ShowreelLink { get; set; }
+
         [Url]
         public string ProfileImage { get; set; }
-        [Url]
-        public string CoverIamge { get; set; }
-        [Required]
-        public string UserId { get; set; }
-        public User User { get; set; }
-        public ICollection<PortfolioItem> portfolioItems { get; set; }
-        public ICollection<JobPost> JobPosts { get; set; }
 
+        [Url]
+        public string CoverImage { get; set; }
+
+        // Foreign key to User
+        [ForeignKey("User")]
+        public int UserId { get; set; }
+
+        public User User { get; set; }
+
+        // Recruiters don't need portfolio items typically, but if you want to keep it:
+        public ICollection<PortfolioItem> PortfolioItems { get; set; }
+
+        // One-to-many relationship with JobPost
+        public ICollection<JobPost> JobPosts { get; set; }
     }
 }

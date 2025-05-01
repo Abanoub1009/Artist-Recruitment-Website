@@ -9,6 +9,7 @@ namespace Models
 {
     public class PortfolioItem
     {
+        [Key]
         public int PortfolioItemId { get; set; }
         [Required, MaxLength(200)]
         public string Title { get; set; }
