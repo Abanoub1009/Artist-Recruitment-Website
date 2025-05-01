@@ -23,18 +23,10 @@ namespace Models
         public DateTime? DateOfBirth { get; set; }
         public virtual ArtistProfile ArtistProfile { get; set; }
         public virtual RecruiterProfile RecruiterProfile { get; set; }
-
         public List<Message> Messages { get; set; }
         public List<Review> reviews { get; set; }
         public List<Notification> notifications { get; set; }
         public List<BlogPost> blogPosts { get; set; }
-
-
-
-
-
         public ICollection<UserRole> UserRoles { get; set; }
-
-
     }
 }

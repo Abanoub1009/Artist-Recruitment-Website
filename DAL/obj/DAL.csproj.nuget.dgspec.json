@@ -133,11 +133,11 @@
             },
             "Microsoft.Extensions.Identity.Core": {
               "target": "Package",
-              "version": "[8.0.13, )"
+              "version": "[9.0.4, )"
             },
             "Microsoft.Extensions.Identity.Stores": {
               "target": "Package",
-              "version": "[8.0.13, )"
+              "version": "[9.0.4, )"
             }
           },
           "imports": [

@@ -14,7 +14,6 @@ namespace Models
         public bool IsRead { get; set; }
         public DateTime CreatedAt { get; set; }
 
-        public string UserId { get; set; }
         public User User { get; set; }
 
     }

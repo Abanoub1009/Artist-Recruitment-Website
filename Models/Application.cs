@@ -15,7 +15,6 @@ namespace Models
         public string PortfolioSampleUri { get; set; }
         public string Status { get; set; } // "Pending", "Shortlisted", etc.
         public DateTime AppliedAt { get; set; }
-
         public ArtistProfile ArtistProfile { get; set; }
         public int ArtistprofileId { get; set; }
     }
