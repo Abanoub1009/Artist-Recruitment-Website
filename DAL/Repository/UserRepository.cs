@@ -1,5 +1,4 @@
 ﻿using DAL.Data;
-using DAL.Repository.IRepository;
 using Models;
 using System;
 using System.Collections.Generic;
@@ -9,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace DAL.Repository
 {
-    public class ApplicationRepository : Repository<Application>, IApplicationRepository
+    public class UserRepository : Repository<User>, IUserRepository
     {
         private readonly AppDbContext _context;
-        public ApplicationRepository(AppDbContext context):base(context)
+        public UserRepository(AppDbContext context):base(context)
         {
             _context = context;
         }
