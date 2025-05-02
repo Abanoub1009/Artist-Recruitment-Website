@@ -4,23 +4,23 @@ using Models;
 
 namespace Artist_Recruitment_Website.Controllers
 {
-    public class UserController : Controller
+    public class ArtistProfileController : Controller
     {
-        private readonly IUserService _service;
-        public UserController(IUserService service)
+        private readonly IArtistProfileService _service;
+        public ArtistProfileController(IArtistProfileService service)
         {
             _service = service;
         }
         public async Task<IActionResult> Index()
         {
-            var users = await _service.GetAllAsync();
-            return View(users);
+            var artists = await _service.GetAllAsync();
+            return View(artists);
         }
         public async Task<IActionResult> Details(int id)
         {
-            var user = await _service.GetByIdAsync(id);
-            if (user == null) return NotFound();
-            return View(user);
+            var artist = await _service.GetByIdAsync(id);
+            if (artist == null) return NotFound();
+            return View(artist);
         }
         [HttpGet]
         public IActionResult Create()
@@ -29,34 +29,34 @@ namespace Artist_Recruitment_Website.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(User user)
+        public async Task<IActionResult> Create(ArtistProfile artistProfile)
         {
             if (!ModelState.IsValid)
-                return View(user);
+                return View(artistProfile);
 
-            await _service.AddAsync(user);
+            await _service.AddAsync(artistProfile);
             return RedirectToAction("Index");
         }
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
-            var user = await _service.GetByIdAsync(id);
-            if (user == null) return NotFound();
-            return View(user);
+            var artist = await _service.GetByIdAsync(id);
+            if (artist == null) return NotFound();
+            return View(artist);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
 
-        public async Task<IActionResult> Edit(int id, User user)
+        public async Task<IActionResult> Edit(int id, ArtistProfile artistProfile)
         {
-            if (id != user.Id)
+            if (id != artistProfile.ArtistProfileId)
                 return BadRequest();
 
             if (!ModelState.IsValid)
-                return View(user);
+                return View(artistProfile);
 
-            await _service.EditAsync(user);
+            await _service.EditAsync(artistProfile);
             return RedirectToAction("Details", new { id });
         }
 
@@ -68,5 +68,6 @@ namespace Artist_Recruitment_Website.Controllers
             await _service.DeleteAsync(id);
             return RedirectToAction("Index");
         }
+
     }
 }

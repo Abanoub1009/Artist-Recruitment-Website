@@ -14,6 +14,8 @@ builder.Services.AddScoped<IApplicationRepository, ApplicationRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IApplicationService, ApplicationService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IArtistProfileService, ArtistProfileService>();
+builder.Services.AddScoped<IArtistProfileRepository, ArtistProfileRepository>();
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<AppDbContext>(
     op => op.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
