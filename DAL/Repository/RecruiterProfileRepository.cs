@@ -9,10 +9,10 @@ using System.Threading.Tasks;
 
 namespace DAL.Repository
 {
-    public class BlogPostRepository : Repository<BlogPost>, IBlogPostRepository
+    public class RecruiterProfileRepository : Repository<RecruiterProfile>, IRecruiterProfileRepository
     {
         private readonly AppDbContext _context;
-        public BlogPostRepository(AppDbContext context): base(context)
+        public RecruiterProfileRepository(AppDbContext context):base(context)
         {
             _context = context;
         }
