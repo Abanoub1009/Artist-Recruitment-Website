@@ -57,7 +57,7 @@
           "dependencies": {
             "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[8.0.13, )"
+              "version": "[8.0.14, )"
             },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
@@ -141,9 +141,9 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
-            "Microsoft.AspNetCore.Identity": {
+            "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[2.3.1, )"
+              "version": "[8.0.14, )"
             },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
@@ -156,14 +156,6 @@
             "Microsoft.EntityFrameworkCore.Tools": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
-              "target": "Package",
-              "version": "[9.0.4, )"
-            },
-            "Microsoft.Extensions.Identity.Core": {
-              "target": "Package",
-              "version": "[9.0.4, )"
-            },
-            "Microsoft.Extensions.Identity.Stores": {
               "target": "Package",
               "version": "[9.0.4, )"
             }

@@ -1,72 +1,62 @@
-﻿using BL.Services.Interface;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Models;
+using Models.Dtos;
 
 namespace Artist_Recruitment_Website.Controllers
 {
     public class UserController : Controller
     {
-        private readonly IUserService _service;
-        public UserController(IUserService service)
+        private readonly UserManager<User> userManager;
+        private readonly RoleManager<Role> roleManager;
+        private readonly SignInManager<User> signInManager;
+        public UserController(UserManager<User> userManager, RoleManager<Role> roleManager, SignInManager<User> signInManager)
         {
-            _service = service;
+            this.userManager = userManager;
+            this.roleManager = roleManager;
+            this.signInManager = signInManager;
         }
-        public async Task<IActionResult> Index()
+        public IActionResult Register()
         {
-            var users = await _service.GetAllAsync();
-            return View(users);
+
+            return View();
         }
-        public async Task<IActionResult> Details(int id)
+        [HttpPost]
+        public async Task<IActionResult> Register(Register register)
         {
-            var user = await _service.GetByIdAsync(id);
-            if (user == null) return NotFound();
-            return View(user);
+            var newUser = new User() {FullName = register.FullName, Email = register.Email, DateOfBirth = register.DateOfBirth,  PhoneNumber = register.PhoneNumber, CreatedAt = DateTime.Today};
+            var reasult = await userManager.CreateAsync(newUser, register.Password);
+            if(reasult.Succeeded)
+            {
+                await signInManager.SignInAsync(newUser, isPersistent: false);
+                return View();
+            }
+            ModelState.AddModelError("", "Invalid Register");
+            return View(register);
         }
-        [HttpGet]
-        public IActionResult Create()
+        public IActionResult SignIn()
         {
             return View();
         }
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(User user)
+        public async Task<IActionResult> SignIn(Login login)
         {
-            if (!ModelState.IsValid)
-                return View(user);
-
-            await _service.AddAsync(user);
-            return RedirectToAction("Index");
+            var res = await signInManager.PasswordSignInAsync(login.Email, login.Password, login.remmberMe, lockoutOnFailure:false);
+            if(res.Succeeded)
+            {
+                return View();
+            }
+            ModelState.AddModelError("", "Invalid Login");
+            return View(login);
         }
-        [HttpGet]
-        public async Task<IActionResult> Edit(int id)
+        public async Task<IActionResult> SignOut()
         {
-            var user = await _service.GetByIdAsync(id);
-            if (user == null) return NotFound();
-            return View(user);
+            await signInManager.SignOutAsync();
+            return View();
         }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-
-        public async Task<IActionResult> Edit(int id, User user)
+        public IActionResult Index()
         {
-            if (id != user.Id)
-                return BadRequest();
-
-            if (!ModelState.IsValid)
-                return View(user);
-
-            await _service.EditAsync(user);
-            return RedirectToAction("Details", new { id });
-        }
-
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(int id)
-        {
-            await _service.DeleteAsync(id);
-            return RedirectToAction("Index");
+            return View();
         }
     }
 }
