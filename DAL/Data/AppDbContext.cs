@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace DAL.Data
 {
-    public class AppDbContext : IdentityDbContext<User, IdentityRole<int>, int>
+    public class AppDbContext : DbContext
 
     {
         public AppDbContext(DbContextOptions<AppDbContext> options)
@@ -27,72 +27,5 @@ namespace DAL.Data
         public DbSet<PortfolioItem> PortfolioItems { get; set; }
         public DbSet<JobPost> JobPosts { get; set; }
         public DbSet<RecruiterProfile> RecruiterProfiles { get; set; }
-        protected override void OnModelCreating(ModelBuilder builder)
-        {
-            base.OnModelCreating(builder);
-
-            // Rename Identity tables (optional)
-            builder.Entity<User>().ToTable("Users");
-
-            // Remove IdentityUserToken table
-            builder.Ignore<IdentityUserToken<int>>();
-
-            // Application - ArtistProfile
-            builder.Entity<Application>()
-                .HasOne(a => a.ArtistProfile)
-                .WithMany(ap => ap.Applications)
-                .HasForeignKey(a => a.ArtistprofileId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            // Application - JobPost
-            builder.Entity<Application>()
-                .HasOne(a => a.JobPost)
-                .WithOne(j => j.Application)
-                .HasForeignKey<Application>(a => a.JobPostId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            // JobPost - RecruiterProfile
-            builder.Entity<JobPost>()
-                .HasOne(j => j.RecruiterProfile)
-                .WithMany(rp => rp.JobPosts)
-                .HasForeignKey(j => j.RecruiterProfileId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            // ArtistProfile - User
-            builder.Entity<ArtistProfile>()
-                .HasOne(ap => ap.User)
-                .WithOne(u => u.ArtistProfile)
-                .HasForeignKey<ArtistProfile>(ap => ap.UserId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            // RecruiterProfile - User
-            builder.Entity<RecruiterProfile>()
-                .HasOne(rp => rp.User)
-                .WithOne(u => u.RecruiterProfile)
-                .HasForeignKey<RecruiterProfile>(rp => rp.UserId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            // Message - User
-            builder.Entity<Message>()
-                .HasOne(m => m.User)
-                .WithMany(u => u.Messages)
-                .HasForeignKey(m => m.UserId)
-                .OnDelete(DeleteBehavior.Restrict)
-                .HasPrincipalKey(u => u.Id);
-
-            // Review - User
-            builder.Entity<Review>()
-                .HasOne(r => r.User)
-                .WithMany(u => u.Reviews)
-                .HasForeignKey(r => r.UserId)
-                .OnDelete(DeleteBehavior.Cascade);
-        }
-
-
-
-
-
-
-
     }
 }

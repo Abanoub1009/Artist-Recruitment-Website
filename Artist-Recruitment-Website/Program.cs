@@ -5,6 +5,7 @@ using DAL.Repository;
 using DAL.Repository.IRepository;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Models;
 using System.Threading.Tasks.Dataflow;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,9 +14,6 @@ var builder = WebApplication.CreateBuilder(args);
 //Application
 builder.Services.AddScoped<IApplicationRepository, ApplicationRepository>();
 builder.Services.AddScoped<IApplicationService, ApplicationService>();
-//User
-builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<IUserService, UserService>();
 //Artist Profile
 builder.Services.AddScoped<IArtistProfileService, ArtistProfileService>();
 builder.Services.AddScoped<IArtistProfileRepository, ArtistProfileRepository>();
@@ -29,6 +27,10 @@ builder.Services.AddScoped<IBlogPostRepository, BlogPostRepository>();
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<AppDbContext>(
     op => op.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
+builder.Services.AddDbContext<UserContext>(
+    op => op.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
+
+builder.Services.AddIdentity<User, Role>().AddEntityFrameworkStores<UserContext>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -43,7 +45,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
