@@ -9,9 +9,9 @@ namespace Models
     {
         public string FullName { get; set; }
         public DateTime CreatedAt { get; set; }
-        public DateOnly? DateOfBirth { get; set; }
+        public DateTime DateOfBirth { get; set; }
 
-        // One-to-one with ArtistProfile
+        //One-to-one with ArtistProfile
         public virtual ArtistProfile ArtistProfile { get; set; }
 
         // One-to-one with RecruiterProfile

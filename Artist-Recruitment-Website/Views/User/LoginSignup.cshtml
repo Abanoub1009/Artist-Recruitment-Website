@@ -1,0 +1,55 @@
+﻿@{
+    ViewData["Title"] = "Login / Signup";
+    Layout = null;
+}
+
+<link rel="stylesheet" href="/css/SignUp_LogIn_Form.css">
+
+<div class="container">
+    <!-- Logo -->
+    @* <div class="logo-box"> *@
+    @*     <img src="/images/theater-logo.png" alt="Theater Logo" class="logo-img" /> *@
+    @* </div> *@
+
+    <!-- Login Form -->
+    <div class="form-box login">
+        @await Html.PartialAsync("_LoginPartial", new Models.Dtos.Login())
+    </div>
+
+    <!-- Register Form -->
+    <div class="form-box register">
+        @await Html.PartialAsync("_RegisterPartial", new Models.Dtos.Register())
+    </div>
+
+    <!-- Toggle Panels -->
+    <div class="toggle-box">
+        <div class="toggle-panel toggle-left">
+            <h1>Hello, Welcome!</h1>
+            <p>Don't have an account?</p>
+            <button class="btn register-btn">Register</button>
+        </div>
+        <div class="toggle-panel toggle-right">
+            <h1>Welcome Back!</h1>
+            <p>Already have an account?</p>
+            <button class="btn login-btn">Login</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const container = document.querySelector('.container');
+    const registerBtn = document.querySelector('.register-btn');
+    const loginBtn = document.querySelector('.login-btn');
+
+    registerBtn.addEventListener('click', () => {
+        container.classList.add('active');
+    });
+
+    loginBtn.addEventListener('click', () => {
+        container.classList.remove('active');
+    });
+</script>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

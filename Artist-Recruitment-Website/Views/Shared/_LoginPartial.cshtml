@@ -1,0 +1,19 @@
+﻿@model Models.Dtos.Login
+
+<form asp-controller="User" asp-action="SignIn" method="post">
+    <h1>Login</h1>
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="input-box">
+        <input asp-for="Email" type="email" placeholder="Email" required />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+    <div class="input-box">
+        <input asp-for="Password" type="password" placeholder="Password" required />
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+    <div class="input-box custom-checkbox">
+        <input asp-for="remmberMe" type="checkbox" id="remember" />
+        <label for="remember">Remember me</label>
+    </div>
+    <button type="submit" class="btn">Login</button>
+</form>
