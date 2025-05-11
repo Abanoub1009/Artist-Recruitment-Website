@@ -26,3 +26,5 @@ C:\Users\Ola\Documents\Artist-Recruitment-Website\Models\obj\Debug\net8.0\Models
 C:\Users\Ola\Documents\Artist-Recruitment-Website\Models\obj\Debug\net8.0\ref\Models.dll
 D:\Artist-Recruitment-Website\Models\bin\Debug\net8.0\Models.runtimeconfig.json
 D:\Artist-Recruitment-Website\Models\obj\Debug\net8.0\Models.genruntimeconfig.cache
+C:\Users\Ola\Documents\Artist-Recruitment-Website\Models\bin\Debug\net8.0\Models.runtimeconfig.json
+C:\Users\Ola\Documents\Artist-Recruitment-Website\Models\obj\Debug\net8.0\Models.genruntimeconfig.cache

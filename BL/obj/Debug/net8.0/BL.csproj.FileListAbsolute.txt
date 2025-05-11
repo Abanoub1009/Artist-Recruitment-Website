@@ -30,3 +30,11 @@ D:\Artist-Recruitment-Website\BL\obj\Debug\net8.0\BL.csproj.AssemblyReference.ca
 D:\Artist-Recruitment-Website\BL\obj\Debug\net8.0\BL.csproj.Up2Date
 D:\Artist-Recruitment-Website\BL\bin\Debug\net8.0\BL.runtimeconfig.json
 D:\Artist-Recruitment-Website\BL\obj\Debug\net8.0\BL.genruntimeconfig.cache
+C:\Users\Ola\Documents\Artist-Recruitment-Website\BL\bin\Debug\net8.0\BL.runtimeconfig.json
+C:\Users\Ola\Documents\Artist-Recruitment-Website\BL\bin\Debug\net8.0\DAL.dll
+C:\Users\Ola\Documents\Artist-Recruitment-Website\BL\bin\Debug\net8.0\Models.dll
+C:\Users\Ola\Documents\Artist-Recruitment-Website\BL\bin\Debug\net8.0\DAL.pdb
+C:\Users\Ola\Documents\Artist-Recruitment-Website\BL\bin\Debug\net8.0\Models.pdb
+C:\Users\Ola\Documents\Artist-Recruitment-Website\BL\obj\Debug\net8.0\BL.csproj.AssemblyReference.cache
+C:\Users\Ola\Documents\Artist-Recruitment-Website\BL\obj\Debug\net8.0\BL.csproj.Up2Date
+C:\Users\Ola\Documents\Artist-Recruitment-Website\BL\obj\Debug\net8.0\BL.genruntimeconfig.cache
