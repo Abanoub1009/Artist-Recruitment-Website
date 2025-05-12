@@ -26,7 +26,7 @@ namespace Models.Dtos
         [Phone]
         public string PhoneNumber { get; set; }
         [Required(ErrorMessage ="Enter your Date Of Birth")]
-        [DataType(DataType.Date)]
-        public DateOnly DateOfBirth { get; set; }
+        [DataType(DataType.DateTime)]
+        public DateTime DateOfBirth { get; set; }
     }
 }
