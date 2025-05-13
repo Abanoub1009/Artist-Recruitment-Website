@@ -14,13 +14,6 @@ namespace Models
         //One-to-one with ArtistProfile
         public virtual ArtistProfile ArtistProfile { get; set; }
 
-        // One-to-one with RecruiterProfile
-        public virtual RecruiterProfile RecruiterProfile { get; set; }
 
-        // One-to-many relationships
-        public ICollection<Message> Messages { get; set; }
-        public ICollection<Review> Reviews { get; set; }
-        public ICollection<Notification> Notifications { get; set; }
-        public ICollection<BlogPost> BlogPosts { get; set; }
     }
 }

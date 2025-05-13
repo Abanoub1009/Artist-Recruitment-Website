@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Models.Dtos
 {
-    public class AuthViewModel
+    public class SendNotificationRequest
     {
-        public Login? Login { get; set; }
-        public Register? Register { get; set; }
+        public int ArtistProfileId { get; set; }
+        public string Content { get; set; }
     }
 }

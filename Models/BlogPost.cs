@@ -14,12 +14,12 @@ namespace Models
         public int BlogPostId { get; set; }
         public string Title { get; set; }
         public string Content { get; set; }
-        [ForeignKey("User")]
+        [ForeignKey("ArtistProfile")]
         public int PostedBy { get; set; } // FK to Admin (User)
         public DateTime PostedAt { get; set; }
 
 
-        public User User { get; set; }
+        public ArtistProfile ArtistProfile { get; set; }
         
     }
 }

@@ -1,0 +1,135 @@
+@model Models.ArtistProfile
+@{
+    ViewData["Title"] = "Artist Details";
+}
+<style>
+    body { background: #18181b; font-family: 'Poppins', Arial, sans-serif; }
+    .profile-container {
+        max-width: 700px;
+        margin: 40px auto;
+        background: #23232b;
+        border-radius: 32px;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+        padding: 40px 32px;
+        color: #fff;
+    }
+    .profile-header {
+        display: flex;
+        align-items: center;
+        gap: 32px;
+        margin-bottom: 32px;
+    }
+    .profile-img {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 4px solid #fff;
+        background: #fff;
+    }
+    .profile-main {
+        flex: 1;
+    }
+    .profile-name {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
+    .profile-location {
+        color: #fcb6e0;
+        font-size: 1.1rem;
+        margin-bottom: 8px;
+    }
+    .profile-available {
+        color: #a084ee;
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
+    .profile-bio {
+        font-size: 1.1rem;
+        margin-bottom: 18px;
+        color: #e0e0e0;
+    }
+    .profile-section {
+        margin-bottom: 24px;
+    }
+    .profile-label {
+        color: #fcb6e0;
+        font-weight: 600;
+        margin-bottom: 4px;
+        display: block;
+    }
+    .profile-socials a {
+        display: inline-block;
+        margin-right: 12px;
+        color: #fff;
+        background: #a084ee;
+        border-radius: 8px;
+        padding: 6px 14px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: background 0.2s;
+    }
+    .profile-socials a:hover {
+        background: #fcb6e0;
+        color: #23232b;
+    }
+    .back-btn {
+        background: #fcb6e0;
+        color: #23232b;
+        border: none;
+        border-radius: 8px;
+        padding: 10px 32px;
+        font-weight: 700;
+        font-size: 1.1rem;
+        text-decoration: none;
+        transition: background 0.2s;
+        box-shadow: 0 2px 8px rgba(252,182,224,0.15);
+        margin-top: 24px;
+        display: inline-block;
+    }
+    .back-btn:hover {
+        background: #a084ee;
+        color: #fff;
+    }
+</style>
+<div class="profile-container">
+    <div class="profile-header">
+        <img class="profile-img" src="@Model.ProfileImage" alt="Profile Image" onerror="this.src='/images/default-profile.png'" />
+        <div class="profile-main">
+            <div class="profile-name">@Model.User?.UserName</div>
+            <div class="profile-location">@Model.Location</div>
+            <div class="profile-available">@((Model.IsAvailable ? "Available for Work" : "Not Available"))</div>
+        </div>
+    </div>
+    <div class="profile-section">
+        <span class="profile-label">Bio</span>
+        <div class="profile-bio">@Model.Bio</div>
+    </div>
+    <div class="profile-section">
+        <span class="profile-label">Skills</span>
+        <div>@Model.Skills</div>
+    </div>
+    <div class="profile-section">
+        <span class="profile-label">Physical Attributes</span>
+        <div>Height: @Model.HeightInCm cm | Weight: @Model.WeightInKg kg</div>
+    </div>
+    <div class="profile-section">
+        <span class="profile-label">Social Links</span>
+        <div class="profile-socials">
+            @if (!string.IsNullOrEmpty(Model.FacebookLink)) {
+                <a href="@Model.FacebookLink" target="_blank">Facebook</a>
+            }
+            @if (!string.IsNullOrEmpty(Model.InstagramLink)) {
+                <a href="@Model.InstagramLink" target="_blank">Instagram</a>
+            }
+            @if (!string.IsNullOrEmpty(Model.YoutubeLink)) {
+                <a href="@Model.YoutubeLink" target="_blank">YouTube</a>
+            }
+            @if (!string.IsNullOrEmpty(Model.ShowreelLink)) {
+                <a href="@Model.ShowreelLink" target="_blank">Showreel</a>
+            }
+        </div>
+    </div>
+    <a class="back-btn" asp-action="Index">Back to List</a>
+</div> 

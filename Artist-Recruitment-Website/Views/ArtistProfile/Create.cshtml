@@ -1,0 +1,382 @@
+@model Models.ArtistProfile
+@{
+    ViewData["Title"] = "Create Artist Profile";
+    var egyptCities = new[] { "Cairo", "Alexandria", "Giza", "Shubra El-Kheima", "Port Said", "Suez", "Luxor", "Asyut", "Mansoura", "Tanta", "Faiyum", "Zagazig", "Ismailia", "Aswan", "Damanhur", "El-Mahalla El-Kubra", "Hurghada", "Qena", "Beni Suef", "Sohag" };
+    var skillKeywords = new[] { "Painter", "Sculptor", "Photographer", "Musician", "Singer", "Dancer", "Actor", "Writer", "Designer", "Illustrator", "Animator", "Filmmaker", "Calligrapher", "Graffiti Artist", "Fashion Designer", "Makeup Artist", "Tattoo Artist", "Digital Artist", "Performer" };
+}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+<style>
+    body {
+        background: linear-gradient(135deg, #18181b 0%, #23232b 100%);
+        font-family: 'Poppins', Arial, sans-serif;
+        min-height: 100vh;
+        margin: 0;
+    }
+
+    .create-artist-container {
+        max-width: 98vw;
+        margin: 40px auto 40px auto;
+        background: rgba(35,35,43,0.98);
+        border-radius: 48px;
+        box-shadow: 0 8px 32px rgba(160,132,238,0.18);
+        padding: 0 0 60px 0;
+        color: #fff;
+        backdrop-filter: blur(10px);
+        animation: fadeIn 1.2s;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    @@keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(60px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .top-images {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 32px;
+        margin-bottom: 0;
+        position: relative;
+    }
+
+    .cover-upload-label {
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+    }
+
+    .cover-banner {
+        width: 100%;
+        max-width: none;
+        height: 220px;
+        border-radius: 32px 32px 0 0;
+        object-fit: cover;
+        background: #fff;
+        box-shadow: 0 12px 48px rgba(252,182,224,0.10);
+        border: 4px solid #fff;
+        z-index: 1;
+        display: block;
+        margin: 0;
+        transition: box-shadow 0.2s, border 0.2s;
+    }
+
+    .cover-upload-label:hover .cover-banner {
+        box-shadow: 0 0 0 6px #fcb6e0, 0 12px 48px rgba(252,182,224,0.10);
+        border: 4px solid #fcb6e0;
+    }
+
+    .avatar-upload-label {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: absolute;
+        left: 50%;
+        top: 180px;
+        transform: translate(-50%, 0);
+        z-index: 2;
+        background: none;
+        border-radius: 50%;
+        padding: 0;
+    }
+
+    .profile-avatar {
+        width: 140px;
+        height: 140px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 7px solid #fff;
+        box-shadow: 0 8px 32px rgba(160,132,238,0.20);
+        background: #fff;
+        margin-bottom: 0;
+        transition: box-shadow 0.2s, border 0.2s;
+    }
+
+    .avatar-upload-label:hover .profile-avatar {
+        box-shadow: 0 0 0 6px #a084ee, 0 8px 32px rgba(160,132,238,0.20);
+        border: 7px solid #a084ee;
+    }
+
+    .img-upload-label {
+        color: #23232b;
+        font-weight: 700;
+        font-size: 1.1rem;
+        margin-bottom: 8px;
+        display: block;
+        text-align: center;
+        background: none;
+    }
+
+    .hidden-file-input {
+        display: none;
+    }
+
+    .form-header {
+        font-size: 2.6rem;
+        font-weight: 800;
+        color: #fff;
+        margin-bottom: 32px;
+        margin-top: 80px;
+        text-align: center;
+        letter-spacing: 1px;
+        text-shadow: 0 4px 24px #b48cf2, 0 0 8px #fff;
+    }
+
+    .form-content {
+        width: 100%;
+        max-width: 900px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 32px 32px;
+        margin-top: 32px;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 0;
+    }
+
+        .form-group label {
+            color: #fcb6e0;
+            font-weight: 700;
+            margin-bottom: 8px;
+            display: block;
+            font-size: 1.08rem;
+        }
+
+    .form-control, select {
+        width: 100%;
+        padding: 16px 18px;
+        border-radius: 14px;
+        border: none;
+        background: #23232b;
+        color: #fff;
+        font-size: 1.08rem;
+        margin-bottom: 0;
+        box-shadow: 0 2px 8px rgba(160,132,238,0.10);
+    }
+
+        .form-control[disabled], select[disabled] {
+            background: #23232b !important;
+            color: #fff !important;
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+    .btn-submit {
+        grid-column: 1 / span 2;
+        background: linear-gradient(90deg, #a084ee 0%, #fcb6e0 100%);
+        color: #23232b;
+        border: none;
+        border-radius: 16px;
+        padding: 20px 0;
+        font-weight: 800;
+        font-size: 1.3rem;
+        text-decoration: none;
+        transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+        box-shadow: 0 4px 16px rgba(160,132,238,0.18);
+        margin-top: 28px;
+        display: block;
+        width: 100%;
+        letter-spacing: 1px;
+    }
+
+        .btn-submit:hover {
+            background: linear-gradient(90deg, #fcb6e0 0%, #a084ee 100%);
+            color: #fff;
+            box-shadow: 0 8px 32px rgba(252,182,224,0.18);
+        }
+
+    .validation-message {
+        color: #fcb6e0;
+        font-size: 1.02rem;
+        margin: 4px 0 0 0;
+        min-height: 20px;
+    }
+
+    .social-inputs {
+        display: flex;
+        gap: 18px;
+        margin-bottom: 0;
+    }
+
+        .social-inputs .form-group {
+            flex: 1;
+        }
+
+    .social-icon {
+        margin-right: 8px;
+        color: #a084ee;
+        font-size: 1.2rem;
+    }
+
+    .required-star {
+        color: #fcb6e0;
+        font-size: 1.1rem;
+        margin-left: 4px;
+    }
+
+    @@media (max-width: 900px) {
+        .create-artist-container {
+            max-width: 98vw;
+            padding: 0;
+        }
+
+        .form-content {
+            grid-template-columns: 1fr;
+            max-width: 98vw;
+        }
+
+        .cover-banner {
+            max-width: 98vw;
+        }
+
+        .avatar-upload-label {
+            position: static;
+            transform: none;
+            margin-top: 0;
+        }
+
+        .btn-submit {
+            grid-column: 1;
+        }
+    }
+</style>
+<div class="create-artist-container">
+    <div class="top-images">
+        <label class="cover-upload-label" for="CoverImageFile" aria-label="Upload cover image">
+            <img id="coverPreview" class="cover-banner" src="/images/default-fb-cover.jpg" alt="Cover Image" onerror="this.onerror=null;this.src='https://via.placeholder.com/800x220/eee/aaa?text=Cover+Image';" />
+            <input type="file" name="CoverImageFile" accept="image/*" class="hidden-file-input" id="CoverImageFile" onchange="previewImage(event, 'coverPreview')" required aria-required="true" />
+            <span class="img-upload-label">Cover Image <span class="required-star" aria-hidden="true">*</span></span>
+        </label>
+        <label class="avatar-upload-label" for="ProfileImageFile" aria-label="Upload profile image">
+            <img id="avatarPreview" class="profile-avatar" src="/images/default-fb-avatar.png" alt="Profile Image" onerror="this.onerror=null;this.src='https://ui-avatars.com/api/?name=Artist&background=cccccc&color=fff&size=140';" />
+            <input type="file" name="ProfileImageFile" accept="image/*" class="hidden-file-input" id="ProfileImageFile" onchange="previewImage(event, 'avatarPreview')" required aria-required="true" />
+            <span class="img-upload-label">Profile Image <span class="required-star" aria-hidden="true">*</span></span>
+        </label>
+    </div>
+    <div class="form-header">Create Artist Profile</div>
+    <form asp-action="Create" method="post" enctype="multipart/form-data" style="width:100%;max-width:900px;">
+        <div class="form-content">
+            <div class="form-group">
+                <label asp-for="Bio">Bio</label>
+                <textarea asp-for="Bio" class="form-control" aria-label="Artist bio"></textarea>
+                <span asp-validation-for="Bio" class="validation-message"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="HeightInCm">Height (cm)</label>
+                <input asp-for="HeightInCm" class="form-control" type="number" min="0" step="0.1" aria-label="Height in centimeters" />
+                <span asp-validation-for="HeightInCm" class="validation-message"></span>
+            </div>
+            <div class="form-group">
+                <label for="SkillsInput">Skills <span class="required-star" aria-hidden="true">*</span></label>
+                <input id="SkillsInput" name="SkillsInput" class="form-control" list="SkillKeywords" placeholder="Type or select a skill, e.g. Painter, Jazz, 3D Modeling" required aria-required="true" />
+                <datalist id="SkillKeywords">
+                    @foreach (var skill in skillKeywords)
+                    {
+                        <option value="@skill">@skill</option>
+                    }
+                </datalist>
+                <span asp-validation-for="Skills" class="validation-message"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="WeightInKg">Weight (kg)</label>
+                <input asp-for="WeightInKg" class="form-control" type="number" min="0" step="0.1" aria-label="Weight in kilograms" />
+                <span asp-validation-for="WeightInKg" class="validation-message"></span>
+            </div>
+            <input type="hidden" asp-for="Skills" id="Skills" />
+            <div class="form-group">
+                <label>Country</label>
+                <input class="form-control" value="Egypt" disabled aria-label="Country" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Location">City</label>
+                <select asp-for="Location" class="form-control" aria-label="Select city">
+                    @foreach (var city in egyptCities)
+                    {
+                        <option value="@city">@city</option>
+                    }
+                </select>
+                <span asp-validation-for="Location" class="validation-message"></span>
+            </div>
+            <div class="social-inputs">
+                <div class="form-group">
+                    <label asp-for="FacebookLink"><i class="fab fa-facebook social-icon" aria-hidden="true"></i> Facebook (optional)</label>
+                    <input asp-for="FacebookLink" class="form-control" type="url" placeholder="https://facebook.com/your-profile" aria-label="Facebook profile URL" />
+                    <span asp-validation-for="FacebookLink" class="validation-message"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="InstagramLink"><i class="fab fa-instagram social-icon" aria-hidden="true"></i> Instagram (optional)</label>
+                    <input asp-for="InstagramLink" class="form-control" type="url" placeholder="https://instagram.com/your-profile" aria-label="Instagram profile URL" />
+                    <span asp-validation-for="InstagramLink" class="validation-message"></span>
+                </div>
+            </div>
+            <div class="social-inputs">
+                <div class="form-group">
+                    <label asp-for="YoutubeLink"><i class="fab fa-youtube social-icon" aria-hidden="true"></i> YouTube (optional)</label>
+                    <input asp-for="YoutubeLink" class="form-control" type="url" placeholder="https://youtube.com/your-channel" aria-label="YouTube channel URL" />
+                    <span asp-validation-for="YoutubeLink" class="validation-message"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ShowreelLink"><i class="fas fa-film social-icon" aria-hidden="true"></i> Showreel (optional)</label>
+                    <input asp-for="ShowreelLink" class="form-control" type="url" placeholder="https://your-showreel-url" aria-label="Showreel URL" />
+                    <span asp-validation-for="ShowreelLink" class="validation-message"></span>
+                </div>
+            </div>
+            <button type="submit" class="btn-submit">Create</button>
+        </div>
+    </form>
+</div>
+<script>
+    function previewImage(event, id) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        // Validate file type
+        if (!file.type.startsWith('image/')) {
+            alert('Please select an image file');
+            event.target.value = '';
+            return;
+        }
+
+        // Validate file size (max 5MB)
+        if (file.size > 5 * 1024 * 1024) {
+            alert('Image size should be less than 5MB');
+            event.target.value = '';
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function() {
+            const output = document.getElementById(id);
+            output.src = reader.result;
+        };
+        reader.readAsDataURL(file);
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.querySelector('form');
+        form.addEventListener('submit', function(e) {
+            const skillsInput = document.getElementById('SkillsInput').value;
+            document.getElementById('Skills').value = skillsInput;
+        });
+    });
+</script>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

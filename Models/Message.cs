@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Models
 {
@@ -12,13 +8,25 @@ namespace Models
     {
         [Key]
         public int MessageId { get; set; }
-        public int SenderId { get; set; }
-        public int ReceiverId { get; set; }
-        public string Content { get; set; }
-        public DateTime SentAt { get; set; }
 
-        [ForeignKey("User")]
-        public int UserId { get; set; }
-        public User User { get; set; }
+        [Required]
+        public string Content { get; set; }
+
+        public DateTime SentAt { get; set; } = DateTime.Now;
+
+        // Foreign keys for sender and receiver
+        [Required]
+        public int SenderId { get; set; }
+
+
+        public ArtistProfile Sender { get; set; }
+
+        [Required]
+        public int ReceiverId { get; set; }
+
+        public ArtistProfile Receiver { get; set; }
+
+        // Status of the message (read/unread)
+        public bool IsRead { get; set; } = false;
     }
 }

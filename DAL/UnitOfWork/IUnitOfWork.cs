@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DAL.Repository
+namespace DAL.UnitOfWork
 {
-    public class NotificationRepository
+    public interface IUnitOfWork
     {
+        Task SaveAsync();
     }
 }

@@ -27,31 +27,38 @@ namespace Models
         public int? WeightInKg { get; set; }
 
         [Url]
-        public string YoutubeLink { get; set; }
+        public string? YoutubeLink { get; set; }
 
         [Url]
-        public string InstagramLink { get; set; }
+        public string? InstagramLink { get; set; }
 
         [Url]
-        public string FacebookLink { get; set; }
+        public string? FacebookLink { get; set; }
 
         [Url]
-        public string ShowreelLink { get; set; }
+        public string? ShowreelLink { get; set; }
 
         [Url]
         public string ProfileImage { get; set; }
 
         [Url]
         public string CoverImage { get; set; }
-
-        // Foreign key for User
-        [ForeignKey("User")]
         public int UserId { get; set; }
-
+        [ForeignKey("UserId")]
         public User User { get; set; }
+        public ICollection<Message> SentMessages { get; set; }
+        public ICollection<Message> ReceivedMessages { get; set; }
 
         // One-to-many: Portfolio items
         public ICollection<PortfolioItem> PortfolioItems { get; set; }
-        public ICollection<Application> Applications { get; set; }
+
+        public ICollection<Review> Reviews { get; set; }
+        public ICollection<Notification> Notifications { get; set; }
+        public ICollection<BlogPost> BlogPosts { get; set; }
+        public ICollection<JobPost> JobPosts { get; set; }
+
+        // Adding SignalR - Track online users (if needed, you can add an online flag)
+        // Optional: This is a signal that might be useful if you want to track whether a user is actively online
+        public bool IsOnline { get; set; }  // This is optional, based on your app needs
     }
 }

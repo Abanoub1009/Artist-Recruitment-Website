@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,9 +18,9 @@ namespace Models
         public string PortfolioSampleUri { get; set; }
         public string Status { get; set; }
         public DateTime AppliedAt { get; set; }
+        [ForeignKey("ArtistprofileId")]
         public ArtistProfile ArtistProfile { get; set; }
         public int ArtistprofileId { get; set; }
-        public int JobPostId { get; set; }
         public JobPost JobPost { get; set; }
     }
 }

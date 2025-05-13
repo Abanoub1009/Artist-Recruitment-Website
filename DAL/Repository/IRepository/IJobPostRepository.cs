@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DAL.Repository.IRepository
 {
-    public interface IRecruiterProfileRepository : IRepository<RecruiterProfile>
+    public interface IJobPostRepository : IRepository<JobPost>
     {
     }
 }

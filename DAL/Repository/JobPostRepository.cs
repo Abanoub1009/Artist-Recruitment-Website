@@ -1,5 +1,6 @@
 ﻿using DAL.Data;
 using DAL.Repository.IRepository;
+using Microsoft.EntityFrameworkCore;
 using Models;
 using System;
 using System.Collections.Generic;
@@ -9,10 +10,10 @@ using System.Threading.Tasks;
 
 namespace DAL.Repository
 {
-    public class RecruiterProfileRepository : Repository<RecruiterProfile>, IRecruiterProfileRepository
+    public class JobPostRepository : Repository<JobPost>, IJobPostRepository
     {
         private readonly AppDbContext _context;
-        public RecruiterProfileRepository(AppDbContext context):base(context)
+        public JobPostRepository(AppDbContext context) : base(context)
         {
             _context = context;
         }

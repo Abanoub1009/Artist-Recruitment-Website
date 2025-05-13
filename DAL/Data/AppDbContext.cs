@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace DAL.Data
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : IdentityDbContext<User,Role,int>
 
     {
         public AppDbContext(DbContextOptions<AppDbContext> options)
@@ -26,6 +26,30 @@ namespace DAL.Data
         public DbSet<ArtistProfile> ArtistProfiles { get; set; }
         public DbSet<PortfolioItem> PortfolioItems { get; set; }
         public DbSet<JobPost> JobPosts { get; set; }
-        public DbSet<RecruiterProfile> RecruiterProfiles { get; set; }
+        public DbSet<Like> Likes { get; set; }
+        public DbSet<Comment> Comments { get; set; }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Message>()
+                .HasOne(m => m.Sender)
+                .WithMany(ap => ap.SentMessages)
+                .HasForeignKey(m => m.SenderId)
+                .OnDelete(DeleteBehavior.Restrict); // Avoid circular cascade delete
+
+            modelBuilder.Entity<Message>()
+                .HasOne(m => m.Receiver)
+                .WithMany(ap => ap.ReceivedMessages)
+                .HasForeignKey(m => m.ReceiverId)
+                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<JobPost>()
+                .HasOne(j => j.ArtistProfile)
+                .WithMany(a => a.JobPosts)
+                .HasForeignKey(j => j.ArtistProfileId)
+                .OnDelete(DeleteBehavior.Restrict); // or .NoAction
+        }
+
+
     }
 }

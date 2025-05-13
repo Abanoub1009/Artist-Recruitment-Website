@@ -1,8 +1,10 @@
 using BL.Services;
 using BL.Services.Interface;
+using DAL;
 using DAL.Data;
 using DAL.Repository;
 using DAL.Repository.IRepository;
+using DAL.UnitOfWork;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Models;
@@ -17,20 +19,21 @@ builder.Services.AddScoped<IApplicationService, ApplicationService>();
 //Artist Profile
 builder.Services.AddScoped<IArtistProfileService, ArtistProfileService>();
 builder.Services.AddScoped<IArtistProfileRepository, ArtistProfileRepository>();
-//Recruiter Profile
-builder.Services.AddScoped<IRecruiterProfileService, RecruiterProfileService>();
-builder.Services.AddScoped<IRecruiterProfileRepository, RecruiterProfileRepository>();
 //Blog Post
 builder.Services.AddScoped<IBlogPostService, BlogPostService>();
 builder.Services.AddScoped<IBlogPostRepository, BlogPostRepository>();
+//JobPost
+builder.Services.AddScoped<IJobPostRepository, JobPostRepository>();
+builder.Services.AddScoped<IJobPostService, JobPostService>();
+builder.Services.AddScoped<IUnitOfWork, UnitOFWork>();
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<AppDbContext>(
     op => op.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
-builder.Services.AddDbContext<UserContext>(
-    op => op.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
 
-builder.Services.AddIdentity<User, Role>().AddEntityFrameworkStores<UserContext>();
+
+builder.Services.AddIdentity<User, Role>().AddEntityFrameworkStores<AppDbContext>();
+builder.Services.AddSignalR();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -47,7 +50,7 @@ app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
-
+app.MapHub<ChatHub>("/chatHub");
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");

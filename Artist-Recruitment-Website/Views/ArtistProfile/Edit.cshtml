@@ -1,0 +1,235 @@
+@model Models.ArtistProfile
+@{
+    ViewData["Title"] = "Edit Artist Profile";
+}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+<style>
+    body { background: #18181b; font-family: 'Poppins', Arial, sans-serif; }
+    .edit-artist-container {
+        max-width: 700px;
+        margin: 40px auto;
+        background: rgba(35,35,43,0.85);
+        border-radius: 32px;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+        padding: 0 0 40px 0;
+        color: #fff;
+        backdrop-filter: blur(6px);
+        animation: fadeIn 1.2s;
+    }
+    @@keyframes fadeIn {
+        from { opacity: 0; transform: translateY(40px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .cover-banner {
+        width: 100%;
+        height: 180px;
+        border-radius: 32px 32px 0 0;
+        object-fit: cover;
+        background: linear-gradient(90deg, #fcb6e0 0%, #b48cf2 100%);
+        position: relative;
+        box-shadow: 0 4px 24px rgba(252,182,224,0.10);
+        transition: filter 0.3s;
+    }
+    .profile-avatar {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 5px solid #fff;
+        position: absolute;
+        left: 50%;
+        top: 120px;
+        transform: translate(-50%, 0);
+        box-shadow: 0 4px 24px rgba(160,132,238,0.15);
+        background: #fff;
+        transition: box-shadow 0.3s;
+        z-index: 2;
+    }
+    .form-content {
+        margin-top: 80px;
+        padding: 0 32px;
+        animation: fadeIn 1.5s 0.2s both;
+    }
+    .form-header {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #fff;
+        margin-bottom: 32px;
+        text-align: center;
+    }
+    .form-group label {
+        color: #fcb6e0;
+        font-weight: 600;
+        margin-bottom: 6px;
+        display: block;
+    }
+    .form-control, input[type="file"] {
+        width: 100%;
+        padding: 10px 14px;
+        border-radius: 8px;
+        border: none;
+        margin-bottom: 18px;
+        background: #2d2d39;
+        color: #fff;
+        font-size: 1rem;
+        transition: box-shadow 0.2s;
+    }
+    .form-control:focus {
+        box-shadow: 0 0 0 2px #fcb6e0;
+        outline: none;
+    }
+    .form-check-label {
+        color: #fff;
+        margin-left: 8px;
+    }
+    .btn-submit {
+        background: linear-gradient(90deg, #a084ee 0%, #fcb6e0 100%);
+        color: #23232b;
+        border: none;
+        border-radius: 8px;
+        padding: 10px 32px;
+        font-weight: 700;
+        font-size: 1.1rem;
+        text-decoration: none;
+        transition: background 0.2s, color 0.2s;
+        box-shadow: 0 2px 8px rgba(160,132,238,0.15);
+        margin-top: 12px;
+        display: block;
+        width: 100%;
+    }
+    .btn-submit:hover {
+        background: linear-gradient(90deg, #fcb6e0 0%, #a084ee 100%);
+        color: #fff;
+    }
+    .validation-message {
+        color: #fcb6e0;
+        font-size: 0.95rem;
+        margin-bottom: 10px;
+    }
+    .social-inputs {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 18px;
+    }
+    .social-inputs .form-group {
+        flex: 1;
+    }
+    .social-icon {
+        margin-right: 6px;
+        color: #a084ee;
+    }
+    .img-upload-label {
+        display: block;
+        margin-bottom: 6px;
+        color: #fcb6e0;
+        font-weight: 600;
+    }
+    .img-preview {
+        width: 100%;
+        max-width: 320px;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 16px;
+        margin-bottom: 12px;
+        box-shadow: 0 2px 8px rgba(252,182,224,0.10);
+        display: block;
+        animation: fadeIn 1s;
+    }
+    .avatar-preview {
+        width: 90px;
+        height: 90px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid #fff;
+        margin-bottom: 12px;
+        background: #fff;
+        animation: fadeIn 1s;
+    }
+</style>
+<div class="edit-artist-container position-relative">
+    <input type="hidden" asp-for="ArtistProfileId" />
+    <img id="coverPreview" class="cover-banner" src="@Model.CoverImage" alt="Cover Image" onerror="this.src='/images/default-cover.jpg'" />
+    <img id="avatarPreview" class="profile-avatar" src="@Model.ProfileImage" alt="Profile Image" onerror="this.src='/images/default-profile.png'" />
+    <div class="form-content">
+        <div class="form-header">Edit Artist Profile</div>
+        <form asp-action="Edit" method="post" enctype="multipart/form-data">
+            <input type="hidden" asp-for="ArtistProfileId" />
+            <div class="form-group">
+                <label class="img-upload-label">Cover Image</label>
+                <input type="file" name="CoverImageFile" accept="image/*" class="form-control" onchange="previewImage(event, 'coverPreview')" />
+                <span asp-validation-for="CoverImage" class="validation-message"></span>
+            </div>
+            <div class="form-group">
+                <label class="img-upload-label">Profile Image</label>
+                <input type="file" name="ProfileImageFile" accept="image/*" class="form-control" onchange="previewImage(event, 'avatarPreview')" />
+                <span asp-validation-for="ProfileImage" class="validation-message"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Bio"></label>
+                <textarea asp-for="Bio" class="form-control"></textarea>
+                <span asp-validation-for="Bio" class="validation-message"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Skills"></label>
+                <input asp-for="Skills" class="form-control" />
+                <span asp-validation-for="Skills" class="validation-message"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Location"></label>
+                <input asp-for="Location" class="form-control" />
+                <span asp-validation-for="Location" class="validation-message"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="IsAvailable"></label>
+                <input asp-for="IsAvailable" type="checkbox" />
+                <span asp-validation-for="IsAvailable" class="validation-message"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="HeightInCm"></label>
+                <input asp-for="HeightInCm" class="form-control" />
+                <span asp-validation-for="HeightInCm" class="validation-message"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="WeightInKg"></label>
+                <input asp-for="WeightInKg" class="form-control" />
+                <span asp-validation-for="WeightInKg" class="validation-message"></span>
+            </div>
+            <div class="social-inputs">
+                <div class="form-group">
+                    <label asp-for="FacebookLink"><i class="fab fa-facebook social-icon"></i>Facebook</label>
+                    <input asp-for="FacebookLink" class="form-control" />
+                    <span asp-validation-for="FacebookLink" class="validation-message"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="InstagramLink"><i class="fab fa-instagram social-icon"></i>Instagram</label>
+                    <input asp-for="InstagramLink" class="form-control" />
+                    <span asp-validation-for="InstagramLink" class="validation-message"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="YoutubeLink"><i class="fab fa-youtube social-icon"></i>YouTube</label>
+                    <input asp-for="YoutubeLink" class="form-control" />
+                    <span asp-validation-for="YoutubeLink" class="validation-message"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ShowreelLink"><i class="fas fa-film social-icon"></i>Showreel</label>
+                    <input asp-for="ShowreelLink" class="form-control" />
+                    <span asp-validation-for="ShowreelLink" class="validation-message"></span>
+                </div>
+            </div>
+            <button type="submit" class="btn-submit">Save Changes</button>
+        </form>
+    </div>
+</div>
+<script>
+    function previewImage(event, id) {
+        const reader = new FileReader();
+        reader.onload = function(){
+            const output = document.getElementById(id);
+            output.src = reader.result;
+        };
+        reader.readAsDataURL(event.target.files[0]);
+    }
+</script>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+} 
