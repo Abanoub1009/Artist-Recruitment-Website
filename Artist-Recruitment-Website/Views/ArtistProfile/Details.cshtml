@@ -519,14 +519,8 @@
             <div class="profile-name">@Model.User.FullName</div>
             <div class="profile-info-row">
                 <div class="profile-location">@Model.Location</div>
-                @if (Model.IsAvailable)
-                {
-                    <div class="profile-available">Available for Work</div>
-                }
-                else
-                {
-                    <div class="profile-not-available">Not Available</div>
-                }
+                    <div class="profile-available">@Model.User.PhoneNumber</div>
+                
             </div>
         </div>
     </div>
