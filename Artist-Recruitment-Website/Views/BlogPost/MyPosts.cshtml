@@ -3,7 +3,7 @@
 
 @{
     ViewData["Title"] = "Blog Posts";
-    var artistProfileId = ViewBag.ArtistProfileId;
+    var artistProfileId = ViewBag.AristId;
     var currentUserArtistProfileId = User.FindFirst("ArtistProfile")?.Value;
     var isOwner = currentUserArtistProfileId != null && artistProfileId.ToString() == currentUserArtistProfileId;
 }

@@ -1,8 +1,11 @@
 @model Models.ArtistProfile
 @{
+
     ViewData["Title"] = "Create Artist Profile";
     var egyptCities = new[] { "Cairo", "Alexandria", "Giza", "Shubra El-Kheima", "Port Said", "Suez", "Luxor", "Asyut", "Mansoura", "Tanta", "Faiyum", "Zagazig", "Ismailia", "Aswan", "Damanhur", "El-Mahalla El-Kubra", "Hurghada", "Qena", "Beni Suef", "Sohag" };
     var skillKeywords = new[] { "Painter", "Sculptor", "Photographer", "Musician", "Singer", "Dancer", "Actor", "Writer", "Designer", "Illustrator", "Animator", "Filmmaker", "Calligrapher", "Graffiti Artist", "Fashion Designer", "Makeup Artist", "Tattoo Artist", "Digital Artist", "Performer" };
+
+    Layout = null;
 }
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 <style>

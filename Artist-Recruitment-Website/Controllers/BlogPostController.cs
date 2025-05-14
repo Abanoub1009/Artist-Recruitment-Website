@@ -36,7 +36,7 @@ namespace Artist_Recruitment_Website.Controllers
                 .Include(p => p.Likes).ThenInclude(l => l.ArtistProfile)
                 .Where(p => p.ArtistProfile != null && p.ArtistProfile.ArtistProfileId == id)
                 .ToListAsync();
-
+            ViewBag.AristId = id;
             return View(posts);
         }
         public async Task<IActionResult> Details(int id)

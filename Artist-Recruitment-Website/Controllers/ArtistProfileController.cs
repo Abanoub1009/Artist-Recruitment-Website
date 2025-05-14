@@ -60,7 +60,6 @@ namespace Artist_Recruitment_Website.Controllers
             {
                 return NotFound();
             }
-            ViewBag.ArtistProfileId = id;
             return View(artistProfile);
         }
 

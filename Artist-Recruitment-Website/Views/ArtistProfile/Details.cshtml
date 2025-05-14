@@ -453,8 +453,8 @@
         <div class="cover-overlay"></div>
         <div class="profile-actions">
             @if(isOwner){
-                <form asp-controller="Artist" asp-action="Edit" method="get" style="display: inline;">
-                    <input type="hidden" name="id" value="@Model.ArtistProfileId" />
+                <form asp-controller="ArtistProfile" asp-action="Edit" method="get" style="display: inline;">
+                    <input type="hidden" name="id" id="id"value="@Model.ArtistProfileId" />
                     <button type="submit" class="action-btn edit-btn">
                         <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
                             <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
