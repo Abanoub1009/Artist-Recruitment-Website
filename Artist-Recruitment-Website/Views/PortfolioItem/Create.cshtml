@@ -1,0 +1,95 @@
+﻿@using Models
+@model PortfolioItem
+@{
+    var artistProfileId = User.FindFirst("ArtistProfile")?.Value;
+    var id = artistProfileId != null ? Convert.ToInt32(artistProfileId) : 0;
+}
+@{
+    ViewData["Title"] = "Add New Artwork";
+}
+
+<link rel="stylesheet" href="/css/portfolio-item.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<div class="portfolio-form-container">
+    <div class="form-header">
+        <h1>@ViewData["Title"]</h1>
+        <a asp-action="Index" class="btn-back">
+            <i class="fas fa-arrow-left"></i> Back to List
+        </a>
+    </div>
+
+    <form asp-action="Create" method="post" enctype="multipart/form-data" class="portfolio-form">
+        <div asp-validation-summary="ModelOnly" class="validation-error"></div>
+        <input type="hidden" asp-for="ArtistProfileId" value="@id"/>
+
+        <div class="form-group">
+            <label asp-for="Title">Artwork Title</label>
+            <input asp-for="Title" class="form-control" placeholder="Enter artwork title" />
+            <span asp-validation-for="Title" class="validation-error"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Type">Artwork Type</label>
+            <select asp-for="Type" class="form-control">
+                <option value="">Select artwork type</option>
+                <option value="Painting">Painting</option>
+                <option value="Photography">Photography</option>
+                <option value="Sculpture">Sculpture</option>
+                <option value="Design">Design</option>
+                <option value="Digital Art">Digital Art</option>
+            </select>
+            <span asp-validation-for="Type" class="validation-error"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Description">Description</label>
+            <textarea asp-for="Description" class="form-control" rows="5" placeholder="Enter detailed description of your artwork"></textarea>
+            <span asp-validation-for="Description" class="validation-error"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="MediaUrl">Artwork Image</label>
+            <input type="file" id="Media" name="Media" class="form-control" accept="image/*" />
+            <label for="Media" class="file-upload-label">
+                <i class="fas fa-cloud-upload-alt file-upload-icon"></i>
+                <span class="file-upload-text">Choose an artwork image</span>
+                <span class="file-upload-hint">Click to upload (JPG, PNG up to 5MB)</span>
+                <span class="file-name"></span>
+            </label>
+            <img class="file-preview" alt="Preview" />
+            <span asp-validation-for="MediaUrl" class="validation-error"></span>
+        </div>
+
+        <button type="submit" class="btn-submit">
+            <i class="fas fa-plus"></i> Create Artwork
+        </button>
+    </form>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        document.getElementById('Media').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            const fileName = document.querySelector('.file-name');
+            const preview = document.querySelector('.file-preview');
+
+            if (file) {
+                // Show file name
+                fileName.textContent = file.name;
+
+                // Show preview
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                }
+                reader.readAsDataURL(file);
+            } else {
+                fileName.textContent = '';
+                preview.style.display = 'none';
+            }
+        });
+    </script>
+}

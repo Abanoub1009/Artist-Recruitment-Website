@@ -1,0 +1,324 @@
+﻿@using Models
+@model IEnumerable<BlogPost>
+
+@{
+    ViewData["Title"] = "Blog Posts";
+    var artistProfileId = ViewBag.ArtistProfileId;
+    var currentUserArtistProfileId = User.FindFirst("ArtistProfile")?.Value;
+    var isOwner = currentUserArtistProfileId != null && artistProfileId.ToString() == currentUserArtistProfileId;
+}
+
+<link rel="stylesheet" href="~/css/job-post.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+    .dropdown-menu {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 100%;
+    background: var(--input-background-dark);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    z-index: 1000;
+    }
+
+    .dropdown-menu.show {
+    display: block;
+    }
+
+    .dropdown-menu a {
+    display: block;
+    padding: 8px 16px;
+    color: var(--text-primary-dark);
+    text-decoration: none;
+    transition: background-color 0.2s;
+    }
+
+    .dropdown-menu a:hover {
+    background-color: var(--hover-background-dark);
+    }
+
+    .post-actions-dropdown {
+    position: relative;
+    }
+
+    .btn-action-menu {
+    background: none;
+    border: none;
+    color: var(--text-primary-dark);
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 50%;
+    transition: background-color 0.2s;
+    }
+
+    .btn-action-menu:hover {
+    background-color: var(--hover-background-dark);
+    }
+
+    .post-description {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    }
+
+    .toast {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 12px 24px;
+    background: var(--input-background-dark);
+    color: var(--text-primary-dark);
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    z-index: 1000;
+    display: none;
+    }
+
+    .toast.show {
+    display: block;
+    animation: fadeIn 0.3s ease-out;
+    }
+</style>
+
+<div class="jobs-container">
+    <div class="jobs-header">
+        <h1>Artist Blog</h1>
+        @if (isOwner)
+        {
+            <a asp-action="Create" class="btn-create-job">
+                <i class="fas fa-pen-fancy"></i>
+            Write New Blog
+        </a>
+        }
+    </div>
+
+    <div class="posts-feed">
+        @foreach (var blog in Model)
+        {
+            <div class="post-card" data-post-id="@blog.BlogPostId">
+                <div class="post-header">
+                    <div class="post-user-info">
+                        @if (!string.IsNullOrEmpty(blog.ArtistProfile?.ProfileImage))
+                        {
+                            <img src="@blog.ArtistProfile.ProfileImage" alt="Profile" class="profile-image">
+                        }
+                        else
+                        {
+                            <div class="profile-placeholder">
+                                <i class="fas fa-user"></i>
+                            </div>
+                        }
+                        <div>
+                            <h3 class="post-author">@blog.ArtistProfile?.User?.FullName</h3>
+                            <span class="post-time">@GetTimeAgo(blog.PostedAt)</span>
+                        </div>
+                    </div>
+                    @if (User.FindFirst("ArtistProfileId")?.Value == blog.PostedBy.ToString())
+                    {
+                        <div class="post-actions-dropdown">
+                            <button class="btn-action-menu">
+                                <i class="fas fa-ellipsis-h"></i>
+                            </button>
+                            <div class="dropdown-menu">
+                                @if (isOwner)
+                                {
+                                    <a asp-action="Edit" asp-route-id="@blog.BlogPostId">
+                                        <i class="fas fa-edit"></i> Edit
+                                    </a>
+                                    <a asp-action="Delete" asp-route-id="@blog.BlogPostId">
+                                        <i class="fas fa-trash"></i> Delete
+                                    </a>
+                                }
+                            </div>
+                        </div>
+                    }
+                </div>
+
+                <div class="post-content">
+                    <h2 class="post-title">@blog.Title</h2>
+
+                    <div class="blog-preview">
+                        @{
+                            var preview = blog.Content.Length > 300 ? blog.Content.Substring(0, 300) + "..." : blog.Content;
+                        }
+                        <div class="post-description">@Html.Raw(preview)</div>
+                    </div>
+
+                    <a asp-action="Details" asp-route-id="@blog.BlogPostId" class="read-more-link">
+                        Read More <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <div class="post-stats">
+                    <span class="views-count"><i class="fas fa-eye"></i> 0 views</span>
+                    <span class="comments-count"><i class="fas fa-comment"></i> 0 comments</span>
+                    <span class="shares-count"><i class="fas fa-share"></i> 0 shares</span>
+                </div>
+
+                <div class="post-interactions">
+                    <button class="interaction-btn like-btn" onclick="toggleLike(@blog.BlogPostId, this)" aria-label="Like this post">
+                        <i class="fas fa-heart"></i> Like
+                    </button>
+                    <span id="like-count-@blog.BlogPostId">@((blog.Likes?.Count() ?? 0))</span>
+                    <button class="interaction-btn comment-btn" onclick="toggleComments(@blog.BlogPostId)" aria-label="Show comments">
+                        <i class="fas fa-comment"></i> Comment
+                    </button>
+                    <button class="interaction-btn share-btn" onclick="sharePost(@blog.BlogPostId)" aria-label="Share this post">
+                        <i class="fas fa-share"></i> Share
+                    </button>
+                </div>
+
+                <div class="comments-section" id="comments-@blog.BlogPostId" style="display: none;">
+                    <input type="text" class="comment-input" placeholder="Write a comment..." onkeypress="handleCommentInput(event, @blog.BlogPostId)" aria-label="Write a comment" style="width:70%;margin-bottom:10px;" />
+                    <div class="comments-list" id="comments-list-@blog.BlogPostId">
+                        @if (blog.Comments != null && blog.Comments.Any())
+                        {
+                            foreach (var comment in blog.Comments.OrderByDescending(c => c.CreatedAt))
+                            {
+                                <div class="comment" style="display:flex;align-items:center;margin-bottom:8px;">
+                                    @if (!string.IsNullOrEmpty(comment.ArtistProfile?.ProfileImage))
+                                    {
+                                        <img src="@comment.ArtistProfile.ProfileImage" alt="Profile" class="profile-image" style="width:32px;height:32px;border-radius:50%;margin-right:8px;" />
+                                    }
+                                    else
+                                    {
+                                        <i class="fas fa-user" style="margin-right:8px;"></i>
+                                    }
+                                    <div>
+                                        <strong>@comment.Username</strong>
+                                        <span style="font-size:0.8em;color:gray;">@GetTimeAgo(comment.CreatedAt)</span>
+                                        <div>@comment.Text</div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <div>No comments yet</div>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+@functions {
+    public string GetTimeAgo(DateTime dateTime)
+    {
+        var span = DateTime.Now - dateTime;
+
+        if (span.TotalDays > 365)
+            return $"{(int)(span.TotalDays / 365)}y ago";
+        if (span.TotalDays > 30)
+            return $"{(int)(span.TotalDays / 30)}mo ago";
+        if (span.TotalDays > 1)
+            return $"{(int)span.TotalDays}d ago";
+        if (span.TotalHours > 1)
+            return $"{(int)span.TotalHours}h ago";
+        if (span.TotalMinutes > 1)
+            return $"{(int)span.TotalMinutes}m ago";
+
+        return "Just now";
+    }
+}
+
+@section Scripts {
+    <script>
+        function showToast(message, duration = 3000) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, duration);
+        }
+
+        function toggleComments(postId) {
+            const commentsSection = document.getElementById(`comments-${postId}`);
+            commentsSection.style.display = commentsSection.style.display === 'none' ? 'block' : 'none';
+        }
+
+        async function sharePost(postId) {
+            try {
+                const url = `${window.location.origin}/BlogPost/Details/${postId}`;
+                await navigator.clipboard.writeText(url);
+                showToast('Blog post link copied to clipboard!');
+            } catch (error) {
+                console.error('Error sharing post:', error);
+                showToast('Failed to copy link to clipboard');
+            }
+        }
+
+        async function toggleLike(postId, btn) {
+            try {
+                        const response = await fetch('/api/blog/likes/toggle', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include', // <-- Add this line
+            body: JSON.stringify({ blogPostId: postId })
+        });
+                if (response.ok) {
+                    const data = await response.json();
+                    document.getElementById(`like-count-${postId}`).textContent = data.likeCount;
+                    btn.classList.toggle('liked', data.liked);
+                }
+            } catch (error) {
+                alert('Failed to update like');
+            }
+        }
+
+        async function handleCommentInput(event, postId) {
+            if (event.key === 'Enter') {
+                const input = event.target;
+                const text = input.value.trim();
+                if (!text) return;
+                try {
+                    const response = await fetch('/api/blog/comments/create', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ blogPostId: postId, text: text })
+                    });
+                    if (response.ok) {
+                        const data = await response.json();
+                        const commentsList = document.getElementById(`comments-list-${postId}`);
+                        const commentHtml = `
+                            <div class="comment" style="display:flex;align-items:center;margin-bottom:8px;">
+                                <img src="${data.profileImage || '/images/default-profile.png'}" alt="Profile" class="profile-image" style="width:32px;height:32px;border-radius:50%;margin-right:8px;" />
+                                <div>
+                                    <strong>${data.username}</strong>
+                                    <span style="font-size:0.8em;color:gray;">Just now</span>
+                                    <div>${data.text}</div>
+                                </div>
+                            </div>
+                        `;
+                        commentsList.insertAdjacentHTML('afterbegin', commentHtml);
+                        input.value = '';
+                    }
+                } catch (error) {
+                    alert('Failed to add comment');
+                }
+            }
+        }
+
+        // Initialize dropdown menus
+        document.querySelectorAll('.btn-action-menu').forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const dropdown = button.nextElementSibling;
+                dropdown.classList.toggle('show');
+            });
+        });
+
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', () => {
+            document.querySelectorAll('.dropdown-menu.show').forEach(dropdown => {
+                dropdown.classList.remove('show');
+            });
+        });
+    </script>
+} 

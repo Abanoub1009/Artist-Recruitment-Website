@@ -1,135 +1,590 @@
-@model Models.ArtistProfile
+﻿@model Models.ArtistProfile
 @{
-    ViewData["Title"] = "Artist Details";
+    ViewData["Title"] = "Artist Profile";
+    var coverUrl = string.IsNullOrEmpty(Model.CoverImage) ? "/images/default-cover.jpg" : Model.CoverImage;
+    var currentUserArtistProfileId = User.FindFirst("ArtistProfile")?.Value;
+    var isOwner = currentUserArtistProfileId != null && Model.ArtistProfileId.ToString() == currentUserArtistProfileId;
 }
 <style>
-    body { background: #18181b; font-family: 'Poppins', Arial, sans-serif; }
+    @@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
+
+    body {
+    background: linear-gradient(135deg, #0f0f13 0%, #1a1a22 100%);
+    font-family: 'Montserrat', sans-serif;
+    color: #fff;
+    margin: 0;
+    padding: 0;
+    }
+
     .profile-container {
-        max-width: 700px;
-        margin: 40px auto;
-        background: #23232b;
-        border-radius: 32px;
-        box-shadow: 0 8px 32px rgba(0,0,0,0.25);
-        padding: 40px 32px;
-        color: #fff;
+    max-width: 1200px;
+    margin: 40px auto;
+    background: linear-gradient(145deg, #24242c 0%, #1e1e26 100%);
+    border-radius: 24px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.35), 0 2px 8px rgba(0,0,0,0.2);
+    padding: 0;
+    overflow: hidden;
+    position: relative;
     }
-    .profile-header {
-        display: flex;
-        align-items: center;
-        gap: 32px;
-        margin-bottom: 32px;
+
+    .cover-photo {
+    position: relative;
+    height: 260px;
+    background: url('@coverUrl');
+    background-size: cover;
+    background-position: center;
+    border-top-left-radius: 24px;
+    border-top-right-radius: 24px;
+    overflow: hidden;
+    background-color: #a084ee;
     }
+
+    .cover-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, rgba(160, 132, 238, 0.25) 0%, rgba(252, 182, 224, 0.25) 100%);
+    z-index: 1;
+    pointer-events: none;
+    }
+
+    .profile-actions {
+    position: absolute;
+    top: 24px;
+    right: 32px;
+    display: flex;
+    gap: 16px;
+    z-index: 2;
+    }
+
+    .action-btn {
+    background: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    padding: 12px 28px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+    backdrop-filter: blur(5px);
+    text-decoration: none;
+    }
+
+    .action-btn:hover {
+    background: rgba(0, 0, 0, 0.7);
+    transform: translateY(-2px);
+    }
+
+    .edit-btn {
+    background: #a084ee;
+    color: #fff;
+    }
+
+    .edit-btn:hover {
+    background: #b48cf2;
+    }
+
+    .reviews-btn {
+    background: #fcb6e0;
+    color: #23232b;
+    }
+
+    .reviews-btn:hover {
+    background: #e86db5;
+    color: #fff;
+    }
+
+    .logout-btn {
+    background: #fcb6e0;
+    color: #23232b;
+    }
+
+    .logout-btn:hover {
+    background: #e86db5;
+    color: #fff;
+    }
+
+    .profile-img-container {
+    position: absolute;
+    left: 48px;
+    bottom: -90px;
+    z-index: 3;
+    width: 180px;
+    height: 180px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+    border-radius: 50%;
+    background: linear-gradient(45deg, #a084ee, #fcb6e0);
+    padding: 6px;
+    }
+
     .profile-img {
-        width: 120px;
-        height: 120px;
-        border-radius: 50%;
-        object-fit: cover;
-        border: 4px solid #fff;
-        background: #fff;
+    width: 168px;
+    height: 168px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: #fff;
+    border: 3px solid #fff;
+    display: block;
     }
+
+    .profile-header {
+    display: flex;
+    align-items: flex-end;
+    margin-top: 100px;
+    padding-left: 260px;
+    min-height: 120px;
+    }
+
     .profile-main {
-        flex: 1;
+    padding-top: 0;
     }
+
     .profile-name {
-        font-size: 2rem;
-        font-weight: 700;
-        margin-bottom: 8px;
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 18px;
+    background: linear-gradient(90deg, #fff, #e0e0e0);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
+
+    .profile-info-row {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    margin-bottom: 16px;
+    }
+
     .profile-location {
-        color: #fcb6e0;
-        font-size: 1.1rem;
-        margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    color: #fcb6e0;
+    font-size: 1.2rem;
+    font-weight: 500;
     }
+
+    .profile-location::before {
+    content: '📍';
+    margin-right: 8px;
+    font-size: 1.3rem;
+    }
+
     .profile-available {
-        color: #a084ee;
-        font-weight: 600;
-        margin-bottom: 8px;
+    display: inline-block;
+    color: #fff;
+    font-weight: 600;
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-size: 1rem;
+    background: linear-gradient(90deg, #a084ee, #9370db);
+    box-shadow: 0 2px 8px rgba(160, 132, 238, 0.3);
     }
+
+    .profile-not-available {
+    display: inline-block;
+    color: #fff;
+    font-weight: 600;
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-size: 1rem;
+    background: linear-gradient(90deg, #666, #888);
+    box-shadow: 0 2px 8px rgba(100, 100, 100, 0.3);
+    }
+
+    .profile-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    padding: 0 60px 40px;
+    }
+
     .profile-bio {
-        font-size: 1.1rem;
-        margin-bottom: 18px;
-        color: #e0e0e0;
+    font-size: 1.15rem;
+    line-height: 1.7;
+    color: #e0e0e0;
+    padding: 30px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 16px;
+    position: relative;
+    grid-column: span 2;
+    margin-bottom: 10px;
     }
+
+    .profile-bio::before {
+    content: '\"';
+    position: absolute;
+    top: 0;
+    left: 10px;
+    font-size: 3.5rem;
+    line-height: 1;
+    color: rgba(252, 182, 224, 0.2);
+    }
+
+    .profile-bio::after {
+    content: '\"';
+    position: absolute;
+    bottom: -10px;
+    right: 10px;
+    font-size: 3.5rem;
+    line-height: 1;
+    color: rgba(252, 182, 224, 0.2);
+    }
+
     .profile-section {
-        margin-bottom: 24px;
+    margin-bottom: 32px;
+    position: relative;
     }
+
     .profile-label {
-        color: #fcb6e0;
-        font-weight: 600;
-        margin-bottom: 4px;
-        display: block;
+    color: #a084ee;
+    font-weight: 600;
+    margin-bottom: 16px;
+    display: block;
+    font-size: 1.2rem;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
     }
-    .profile-socials a {
-        display: inline-block;
-        margin-right: 12px;
-        color: #fff;
-        background: #a084ee;
-        border-radius: 8px;
-        padding: 6px 14px;
-        text-decoration: none;
-        font-weight: 600;
-        transition: background 0.2s;
+
+    .profile-label::after {
+    content: '';
+    display: block;
+    width: 50px;
+    height: 3px;
+    background: linear-gradient(90deg, #a084ee, #fcb6e0);
+    margin-top: 8px;
+    border-radius: 3px;
     }
-    .profile-socials a:hover {
-        background: #fcb6e0;
-        color: #23232b;
+
+    .skill-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
     }
+
+    .skill-tag {
+    background: rgba(160, 132, 238, 0.15);
+    color: #e0e0e0;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 1rem;
+    font-weight: 500;
+    border: 1px solid rgba(160, 132, 238, 0.3);
+    transition: all 0.2s ease;
+    }
+
+    .skill-tag:hover {
+    background: rgba(160, 132, 238, 0.25);
+    transform: translateY(-2px);
+    }
+
+    .attributes-container {
+    display: flex;
+    gap: 20px;
+    }
+
+    .attribute {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 16px;
+    padding: 24px 20px;
+    text-align: center;
+    transition: all 0.2s ease;
+    }
+
+    .attribute:hover {
+    background: rgba(255, 255, 255, 0.06);
+    transform: translateY(-3px);
+    }
+
+    .attribute-value {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 8px;
+    }
+
+    .attribute-label {
+    font-size: 0.9rem;
+    color: #a084ee;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    }
+
+    .profile-socials {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: 20px;
+    }
+
+    .social-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #fff;
+    background: linear-gradient(135deg, rgba(160, 132, 238, 0.8), rgba(160, 132, 238, 0.6));
+    border-radius: 12px;
+    padding: 12px 20px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+
+    .social-link.facebook {
+    background: linear-gradient(135deg, #3b5998, #2d4373);
+    }
+
+    .social-link.instagram {
+    background: linear-gradient(135deg, #e1306c, #c13584);
+    }
+
+    .social-link.youtube {
+    background: linear-gradient(135deg, #ff0000, #cc0000);
+    }
+
+    .social-link.showreel {
+    background: linear-gradient(135deg, #fcb6e0, #e86db5);
+    }
+
+    .social-link:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    .profile-footer {
+    padding: 24px 60px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    display: flex;
+    justify-content: center;
+    }
+
     .back-btn {
-        background: #fcb6e0;
-        color: #23232b;
-        border: none;
-        border-radius: 8px;
-        padding: 10px 32px;
-        font-weight: 700;
-        font-size: 1.1rem;
-        text-decoration: none;
-        transition: background 0.2s;
-        box-shadow: 0 2px 8px rgba(252,182,224,0.15);
-        margin-top: 24px;
-        display: inline-block;
+    background: linear-gradient(90deg, #a084ee, #fcb6e0);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    padding: 14px 40px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(160, 132, 238, 0.3);
+    display: inline-block;
+    text-align: center;
     }
+
     .back-btn:hover {
-        background: #a084ee;
-        color: #fff;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(160, 132, 238, 0.4);
+    }
+
+    .portfolio-btn {
+    background: #a084ee;
+    color: #fff;
+    }
+    .portfolio-btn:hover {
+    background: #b48cf2;
+    }
+    .posts-btn {
+    background: #fcb6e0;
+    color: #23232b;
+    }
+    .posts-btn:hover {
+    background: #e86db5;
+    color: #fff;
+    }
+
+    @@media (max-width: 992px) {
+    .profile-header
+
+    {
+    padding-left: 0;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 80px;
+    }
+
+    .profile-img-container {
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: -70px;
+    width: 140px;
+    height: 140px;
+    padding: 4px;
+    }
+
+    .profile-img {
+    width: 132px;
+    height: 132px;
+    }
+
+    .profile-name {
+    font-size: 2.2rem;
+    }
+
+    .profile-content {
+    grid-template-columns: 1fr;
+    padding: 0 20px 30px;
+    }
+
+    .profile-bio {
+    grid-column: span 1;
+    }
+
+    .attributes-container {
+    flex-direction: column;
+    gap: 12px;
+    }
+
     }
 </style>
+
 <div class="profile-container">
+    <div class="cover-photo">
+        <div class="cover-overlay"></div>
+        <div class="profile-actions">
+            @if(isOwner){
+                <form asp-controller="Artist" asp-action="Edit" method="get" style="display: inline;">
+                    <input type="hidden" name="id" value="@Model.ArtistProfileId" />
+                    <button type="submit" class="action-btn edit-btn">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                        </svg>
+                        Edit Profile
+                    </button>
+                </form>
+            }
+            <form asp-controller="Review" asp-action="Index" method="get" style="display: inline;">
+                <input type="hidden" name="id" value="@Model.ArtistProfileId" />
+                <button type="submit" class="action-btn reviews-btn">
+                    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                    </svg>
+                    Reviews
+                </button>
+            </form>
+            <form asp-controller="PortfolioItem" asp-action="Index" method="get" style="display: inline;">
+                <input type="hidden" asp-for="@Model.ArtistProfileId" name="id" />
+                <button type="submit" class="action-btn portfolio-btn">
+                    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                        <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
+                        <path d="M16 3v4M8 3v4M2 11h20"/>
+                    </svg>
+                    My Portfolio
+                </button>
+            </form>
+            <form asp-controller="BlogPost" asp-action="MyPosts" method="get" style="display: inline;">
+                <input type="hidden" asp-for="@Model.ArtistProfileId" name="id" />
+                <button type="submit" class="action-btn posts-btn">
+                    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                        <line x1="16" y1="2" x2="16" y2="6" />
+                        <line x1="8" y1="2" x2="8" y2="6" />
+                        <line x1="3" y1="10" x2="21" y2="10" />
+                    </svg>
+                    My Posts
+                </button>
+            </form>
+            @if (isOwner)
+            {
+                <form asp-controller="User" asp-action="SignOut" method="post" style="display: inline;">
+                    @Html.AntiForgeryToken()
+                <button type="submit" class="action-btn logout-btn">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                        <polyline points="16 17 21 12 16 7"></polyline>
+                        <line x1="21" y1="12" x2="9" y2="12"></line>
+                    </svg>
+                    Logout
+                </button>
+            </form>
+            }
+        </div>
+        <div class="profile-img-container">
+            <img class="profile-img" src="@Model.ProfileImage" alt="@Model.User.FullName" onerror="this.src='/images/default-profile.png'" />
+        </div>
+    </div>
     <div class="profile-header">
-        <img class="profile-img" src="@Model.ProfileImage" alt="Profile Image" onerror="this.src='/images/default-profile.png'" />
         <div class="profile-main">
-            <div class="profile-name">@Model.User?.UserName</div>
-            <div class="profile-location">@Model.Location</div>
-            <div class="profile-available">@((Model.IsAvailable ? "Available for Work" : "Not Available"))</div>
+            <div class="profile-name">@Model.User.FullName</div>
+            <div class="profile-info-row">
+                <div class="profile-location">@Model.Location</div>
+                @if (Model.IsAvailable)
+                {
+                    <div class="profile-available">Available for Work</div>
+                }
+                else
+                {
+                    <div class="profile-not-available">Not Available</div>
+                }
+            </div>
         </div>
     </div>
-    <div class="profile-section">
-        <span class="profile-label">Bio</span>
+    <div class="profile-content">
         <div class="profile-bio">@Model.Bio</div>
-    </div>
-    <div class="profile-section">
-        <span class="profile-label">Skills</span>
-        <div>@Model.Skills</div>
-    </div>
-    <div class="profile-section">
-        <span class="profile-label">Physical Attributes</span>
-        <div>Height: @Model.HeightInCm cm | Weight: @Model.WeightInKg kg</div>
-    </div>
-    <div class="profile-section">
-        <span class="profile-label">Social Links</span>
-        <div class="profile-socials">
-            @if (!string.IsNullOrEmpty(Model.FacebookLink)) {
-                <a href="@Model.FacebookLink" target="_blank">Facebook</a>
-            }
-            @if (!string.IsNullOrEmpty(Model.InstagramLink)) {
-                <a href="@Model.InstagramLink" target="_blank">Instagram</a>
-            }
-            @if (!string.IsNullOrEmpty(Model.YoutubeLink)) {
-                <a href="@Model.YoutubeLink" target="_blank">YouTube</a>
-            }
-            @if (!string.IsNullOrEmpty(Model.ShowreelLink)) {
-                <a href="@Model.ShowreelLink" target="_blank">Showreel</a>
-            }
+        <div class="profile-section">
+            <span class="profile-label">Skills</span>
+            <div class="skill-tags">
+                @foreach (var skill in Model.Skills?.Split(',', StringSplitOptions.RemoveEmptyEntries) ?? new string[0])
+                {
+                    <span class="skill-tag">@skill.Trim()</span>
+                }
+            </div>
+        </div>
+        <div class="profile-section">
+            <span class="profile-label">Physical Attributes</span>
+            <div class="attributes-container">
+                <div class="attribute">
+                    <div class="attribute-value">@Model.HeightInCm cm</div>
+                    <div class="attribute-label">Height</div>
+                </div>
+                <div class="attribute">
+                    <div class="attribute-value">@Model.WeightInKg kg</div>
+                    <div class="attribute-label">Weight</div>
+                </div>
+            </div>
+        </div>
+        <div class="profile-section">
+            <span class="profile-label">Social Links</span>
+            <div class="profile-socials">
+                @if (!string.IsNullOrEmpty(Model.FacebookLink))
+                {
+                    <a href="@Model.FacebookLink" target="_blank" class="social-link facebook">
+                        Facebook
+                    </a>
+                }
+                @if (!string.IsNullOrEmpty(Model.InstagramLink))
+                {
+                    <a href="@Model.InstagramLink" target="_blank" class="social-link instagram">
+                        Instagram
+                    </a>
+                }
+                @if (!string.IsNullOrEmpty(Model.YoutubeLink))
+                {
+                    <a href="@Model.YoutubeLink" target="_blank" class="social-link youtube">
+                        YouTube
+                    </a>
+                }
+                @if (!string.IsNullOrEmpty(Model.ShowreelLink))
+                {
+                    <a href="@Model.ShowreelLink" target="_blank" class="social-link showreel">
+                        Showreel
+                    </a>
+                }
+            </div>
         </div>
     </div>
-    <a class="back-btn" asp-action="Index">Back to List</a>
-</div> 
+    <div class="profile-footer">
+        <a class="back-btn" asp-action="Index">Back to Artists</a>
+    </div>
+</div>

@@ -1,235 +1,411 @@
 @model Models.ArtistProfile
 @{
     ViewData["Title"] = "Edit Artist Profile";
+    var egyptCities = new[] { "Cairo", "Alexandria", "Giza", "Shubra El-Kheima", "Port Said", "Suez", "Luxor", "Asyut", "Mansoura", "Tanta", "Faiyum", "Zagazig", "Ismailia", "Aswan", "Damanhur", "El-Mahalla El-Kubra", "Hurghada", "Qena", "Beni Suef", "Sohag" };
+    var skillKeywords = new[] { "Painter", "Sculptor", "Photographer", "Musician", "Singer", "Dancer", "Actor", "Writer", "Designer", "Illustrator", "Animator", "Filmmaker", "Calligrapher", "Graffiti Artist", "Fashion Designer", "Makeup Artist", "Tattoo Artist", "Digital Artist", "Performer" };
+    var currentUserArtistProfileId = User.FindFirst("ArtistProfile")?.Value;
+    var artistProfileId = Model?.ArtistProfileId; // Use ?. in case Model is null
+    var isOwner = currentUserArtistProfileId != null 
+                  && artistProfileId != null 
+                  && artistProfileId.ToString() == currentUserArtistProfileId;
 }
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 <style>
-    body { background: #18181b; font-family: 'Poppins', Arial, sans-serif; }
-    .edit-artist-container {
-        max-width: 700px;
+    body {
+        background: linear-gradient(135deg, #18181b 0%, #23232b 100%);
+        font-family: 'Poppins', Arial, sans-serif;
+        min-height: 100vh;
+        margin: 0;
+    }
+
+    .create-artist-container {
+        max-width: 1000px;
         margin: 40px auto;
-        background: rgba(35,35,43,0.85);
-        border-radius: 32px;
-        box-shadow: 0 8px 32px rgba(0,0,0,0.25);
-        padding: 0 0 40px 0;
+        background: rgba(35,35,43,0.98);
+        border-radius: 48px;
+        box-shadow: 0 8px 32px rgba(160,132,238,0.18);
+        padding-bottom: 60px;
         color: #fff;
-        backdrop-filter: blur(6px);
-        animation: fadeIn 1.2s;
+        backdrop-filter: blur(10px);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
     }
-    @@keyframes fadeIn {
-        from { opacity: 0; transform: translateY(40px); }
-        to { opacity: 1; transform: translateY(0); }
+
+    .top-images {
+        width: 100%;
+        position: relative;
+        margin-top: 0;
+        margin-bottom: 0;
     }
+
     .cover-banner {
         width: 100%;
-        height: 180px;
-        border-radius: 32px 32px 0 0;
+        max-width: 100%;
+        height: 220px;
+        border-radius: 48px 48px 0 0;
         object-fit: cover;
-        background: linear-gradient(90deg, #fcb6e0 0%, #b48cf2 100%);
-        position: relative;
-        box-shadow: 0 4px 24px rgba(252,182,224,0.10);
-        transition: filter 0.3s;
+        display: block;
+        background: #fff;
+        box-shadow: 0 12px 48px rgba(252,182,224,0.10);
+        border: none;
+        margin: 0;
     }
-    .profile-avatar {
-        width: 120px;
-        height: 120px;
-        border-radius: 50%;
-        object-fit: cover;
-        border: 5px solid #fff;
+
+    .avatar-upload-label {
         position: absolute;
         left: 50%;
-        top: 120px;
-        transform: translate(-50%, 0);
-        box-shadow: 0 4px 24px rgba(160,132,238,0.15);
-        background: #fff;
-        transition: box-shadow 0.3s;
+        bottom: -70px;
+        transform: translateX(-50%);
         z-index: 2;
+        background: none;
+        border-radius: 50%;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
-    .form-content {
-        margin-top: 80px;
-        padding: 0 32px;
-        animation: fadeIn 1.5s 0.2s both;
+
+    .profile-avatar {
+        width: 140px;
+        height: 140px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 7px solid #fff;
+        box-shadow: 0 8px 32px rgba(160,132,238,0.20);
+        background: #fff;
+        margin-bottom: 0;
+        transition: box-shadow 0.2s, border 0.2s;
     }
+
     .form-header {
-        font-size: 2rem;
-        font-weight: 700;
+        font-size: 2.6rem;
+        font-weight: 800;
         color: #fff;
         margin-bottom: 32px;
+        margin-top: 80px;
         text-align: center;
+        letter-spacing: 1px;
+        text-shadow: 0 4px 24px #b48cf2, 0 0 8px #fff;
     }
+
+    .form-content {
+        width: 100%;
+        max-width: 900px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 32px 32px;
+        margin-top: 32px;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 0;
+    }
+
     .form-group label {
         color: #fcb6e0;
-        font-weight: 600;
-        margin-bottom: 6px;
+        font-weight: 700;
+        margin-bottom: 8px;
         display: block;
+        font-size: 1.08rem;
     }
-    .form-control, input[type="file"] {
+
+    .form-control, select {
         width: 100%;
-        padding: 10px 14px;
-        border-radius: 8px;
+        padding: 16px 18px;
+        border-radius: 14px;
         border: none;
-        margin-bottom: 18px;
-        background: #2d2d39;
+        background: #23232b;
         color: #fff;
-        font-size: 1rem;
-        transition: box-shadow 0.2s;
+        font-size: 1.08rem;
+        margin-bottom: 0;
+        box-shadow: 0 2px 8px rgba(160,132,238,0.10);
     }
-    .form-control:focus {
-        box-shadow: 0 0 0 2px #fcb6e0;
-        outline: none;
+
+    .form-control[disabled], select[disabled] {
+        background: #23232b !important;
+        color: #fff !important;
+        opacity: 0.7;
+        cursor: not-allowed;
     }
-    .form-check-label {
-        color: #fff;
-        margin-left: 8px;
-    }
+
     .btn-submit {
+        grid-column: 1 / span 2;
         background: linear-gradient(90deg, #a084ee 0%, #fcb6e0 100%);
         color: #23232b;
         border: none;
-        border-radius: 8px;
-        padding: 10px 32px;
-        font-weight: 700;
-        font-size: 1.1rem;
+        border-radius: 16px;
+        padding: 20px 0;
+        font-weight: 800;
+        font-size: 1.3rem;
         text-decoration: none;
-        transition: background 0.2s, color 0.2s;
-        box-shadow: 0 2px 8px rgba(160,132,238,0.15);
-        margin-top: 12px;
+        transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+        box-shadow: 0 4px 16px rgba(160,132,238,0.18);
+        margin-top: 28px;
         display: block;
         width: 100%;
+        letter-spacing: 1px;
     }
+
     .btn-submit:hover {
         background: linear-gradient(90deg, #fcb6e0 0%, #a084ee 100%);
         color: #fff;
+        box-shadow: 0 8px 32px rgba(252,182,224,0.18);
     }
+
     .validation-message {
         color: #fcb6e0;
-        font-size: 0.95rem;
-        margin-bottom: 10px;
+        font-size: 1.02rem;
+        margin: 4px 0 0 0;
+        min-height: 20px;
     }
+
     .social-inputs {
         display: flex;
-        gap: 12px;
-        margin-bottom: 18px;
+        gap: 18px;
+        margin-bottom: 0;
     }
+
     .social-inputs .form-group {
         flex: 1;
     }
+
     .social-icon {
-        margin-right: 6px;
+        margin-right: 8px;
         color: #a084ee;
+        font-size: 1.2rem;
     }
-    .img-upload-label {
-        display: block;
-        margin-bottom: 6px;
+
+    .required-star {
         color: #fcb6e0;
-        font-weight: 600;
+        font-size: 1.1rem;
+        margin-left: 4px;
     }
-    .img-preview {
-        width: 100%;
-        max-width: 320px;
-        height: 80px;
-        object-fit: cover;
-        border-radius: 16px;
-        margin-bottom: 12px;
-        box-shadow: 0 2px 8px rgba(252,182,224,0.10);
-        display: block;
-        animation: fadeIn 1s;
-    }
-    .avatar-preview {
-        width: 90px;
-        height: 90px;
-        border-radius: 50%;
-        object-fit: cover;
-        border: 3px solid #fff;
-        margin-bottom: 12px;
-        background: #fff;
-        animation: fadeIn 1s;
+
+    @@media (max-width: 900px) {
+        .create-artist-container {
+            max-width: 98vw;
+            padding: 0;
+        }
+
+        .form-content {
+            grid-template-columns: 1fr;
+            max-width: 98vw;
+        }
+
+        .cover-banner {
+            max-width: 98vw;
+        }
+
+        .avatar-upload-label {
+            position: static;
+            transform: none;
+            margin-top: 0;
+        }
+
+        .btn-submit {
+            grid-column: 1;
+        }
     }
 </style>
-<div class="edit-artist-container position-relative">
-    <input type="hidden" asp-for="ArtistProfileId" />
-    <img id="coverPreview" class="cover-banner" src="@Model.CoverImage" alt="Cover Image" onerror="this.src='/images/default-cover.jpg'" />
-    <img id="avatarPreview" class="profile-avatar" src="@Model.ProfileImage" alt="Profile Image" onerror="this.src='/images/default-profile.png'" />
-    <div class="form-content">
-        <div class="form-header">Edit Artist Profile</div>
-        <form asp-action="Edit" method="post" enctype="multipart/form-data">
-            <input type="hidden" asp-for="ArtistProfileId" />
+@if(isOwner)
+{
+<div class="create-artist-container">
+    <div class="top-images">
+        <label class="cover-upload-label" for="CoverImageFile" aria-label="Upload cover image">
+            <img id="coverPreview" class="cover-banner" src="@Model.CoverImage" alt="Cover Image" onerror="this.onerror=null;this.src='https://via.placeholder.com/800x220/eee/aaa?text=Cover+Image';" />
+            <input type="file" name="CoverImageFile" accept="image/*" class="hidden-file-input" id="CoverImageFile" onchange="previewImage(event, 'coverPreview')" />
+        </label>
+        <label class="avatar-upload-label" for="ProfileImageFile" aria-label="Upload profile image">
+            <img id="avatarPreview" class="profile-avatar" src="@Model.ProfileImage" alt="Profile Image" onerror="this.onerror=null;this.src='https://ui-avatars.com/api/?name=Artist&background=cccccc&color=fff&size=140';" />
+            <input type="file" name="ProfileImageFile" accept="image/*" class="hidden-file-input" id="ProfileImageFile" onchange="previewImage(event, 'avatarPreview')" />
+        </label>
+    </div>
+    <div class="form-header">Edit Artist Profile</div>
+    <form asp-action="Edit" method="post" enctype="multipart/form-data" style="width:100%;max-width:900px;">
+        <input type="hidden" asp-for="UserId" />
+        <div asp-validation-summary="ModelOnly" class="validation-message" style="grid-column: 1 / span 2; text-align: center;"></div>
+        <div class="form-content">
             <div class="form-group">
-                <label class="img-upload-label">Cover Image</label>
-                <input type="file" name="CoverImageFile" accept="image/*" class="form-control" onchange="previewImage(event, 'coverPreview')" />
-                <span asp-validation-for="CoverImage" class="validation-message"></span>
-            </div>
-            <div class="form-group">
-                <label class="img-upload-label">Profile Image</label>
-                <input type="file" name="ProfileImageFile" accept="image/*" class="form-control" onchange="previewImage(event, 'avatarPreview')" />
-                <span asp-validation-for="ProfileImage" class="validation-message"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Bio"></label>
-                <textarea asp-for="Bio" class="form-control"></textarea>
+                <label asp-for="Bio">Bio</label>
+                <textarea asp-for="Bio" class="form-control" aria-label="Artist bio"></textarea>
                 <span asp-validation-for="Bio" class="validation-message"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Skills"></label>
-                <input asp-for="Skills" class="form-control" />
-                <span asp-validation-for="Skills" class="validation-message"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Location"></label>
-                <input asp-for="Location" class="form-control" />
-                <span asp-validation-for="Location" class="validation-message"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="IsAvailable"></label>
-                <input asp-for="IsAvailable" type="checkbox" />
-                <span asp-validation-for="IsAvailable" class="validation-message"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="HeightInCm"></label>
-                <input asp-for="HeightInCm" class="form-control" />
+                <label asp-for="HeightInCm">Height (cm)</label>
+                <input asp-for="HeightInCm" class="form-control" type="number" min="0" step="0.1" aria-label="Height in centimeters" />
                 <span asp-validation-for="HeightInCm" class="validation-message"></span>
             </div>
             <div class="form-group">
-                <label asp-for="WeightInKg"></label>
-                <input asp-for="WeightInKg" class="form-control" />
+                <label for="SkillsInput">Skills</label>
+                <input id="SkillsInput" name="SkillsInput" class="form-control" list="SkillKeywords" placeholder="Type or select a skill, e.g. Painter, Jazz, 3D Modeling" value="@Model.Skills" />
+                <datalist id="SkillKeywords">
+                    @foreach (var skill in skillKeywords)
+                    {
+                        <option value="@skill">@skill</option>
+                    }
+                </datalist>
+                <span asp-validation-for="Skills" class="validation-message"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="WeightInKg">Weight (kg)</label>
+                <input asp-for="WeightInKg" class="form-control" type="number" min="0" step="0.1" aria-label="Weight in kilograms" />
                 <span asp-validation-for="WeightInKg" class="validation-message"></span>
+            </div>
+            <input type="hidden" asp-for="Skills" id="Skills" />
+            <div class="form-group">
+                <label>Country</label>
+                <input class="form-control" value="Egypt" disabled aria-label="Country" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Location">City</label>
+                <select asp-for="Location" class="form-control" aria-label="Select city">
+                    @foreach (var city in egyptCities)
+                    {
+                        <option value="@city">@city</option>
+                    }
+                </select>
+                <span asp-validation-for="Location" class="validation-message"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="IsAvailable">Available for work/hire</label>
+                <input asp-for="IsAvailable" type="checkbox" />
+                <span asp-validation-for="IsAvailable" class="validation-message"></span>
             </div>
             <div class="social-inputs">
                 <div class="form-group">
-                    <label asp-for="FacebookLink"><i class="fab fa-facebook social-icon"></i>Facebook</label>
-                    <input asp-for="FacebookLink" class="form-control" />
+                    <label asp-for="FacebookLink"><i class="fab fa-facebook social-icon" aria-hidden="true"></i> Facebook (optional)</label>
+                    <input asp-for="FacebookLink" class="form-control" type="url" placeholder="https://facebook.com/your-profile" aria-label="Facebook profile URL" />
                     <span asp-validation-for="FacebookLink" class="validation-message"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="InstagramLink"><i class="fab fa-instagram social-icon"></i>Instagram</label>
-                    <input asp-for="InstagramLink" class="form-control" />
+                    <label asp-for="InstagramLink"><i class="fab fa-instagram social-icon" aria-hidden="true"></i> Instagram (optional)</label>
+                    <input asp-for="InstagramLink" class="form-control" type="url" placeholder="https://instagram.com/your-profile" aria-label="Instagram profile URL" />
                     <span asp-validation-for="InstagramLink" class="validation-message"></span>
                 </div>
+            </div>
+            <div class="social-inputs">
                 <div class="form-group">
-                    <label asp-for="YoutubeLink"><i class="fab fa-youtube social-icon"></i>YouTube</label>
-                    <input asp-for="YoutubeLink" class="form-control" />
+                    <label asp-for="YoutubeLink"><i class="fab fa-youtube social-icon" aria-hidden="true"></i> YouTube (optional)</label>
+                    <input asp-for="YoutubeLink" class="form-control" type="url" placeholder="https://youtube.com/your-channel" aria-label="YouTube channel URL" />
                     <span asp-validation-for="YoutubeLink" class="validation-message"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="ShowreelLink"><i class="fas fa-film social-icon"></i>Showreel</label>
-                    <input asp-for="ShowreelLink" class="form-control" />
+                    <label asp-for="ShowreelLink"><i class="fas fa-film social-icon" aria-hidden="true"></i> Showreel (optional)</label>
+                    <input asp-for="ShowreelLink" class="form-control" type="url" placeholder="https://your-showreel-url" aria-label="Showreel URL" />
                     <span asp-validation-for="ShowreelLink" class="validation-message"></span>
                 </div>
             </div>
-            <button type="submit" class="btn-submit">Save Changes</button>
-        </form>
-    </div>
+            <div class="form-group">
+                <label asp-for="User.FullName">Name</label>
+                <input asp-for="User.FullName" class="form-control" />
+                <span asp-validation-for="User.FullName" class="validation-message"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="User.Email">Email</label>
+                <input asp-for="User.Email" class="form-control" type="email" />
+                <span asp-validation-for="User.Email" class="validation-message"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="User.PhoneNumber">Phone Number</label>
+                <input asp-for="User.PhoneNumber" class="form-control" type="tel" />
+                <span asp-validation-for="User.PhoneNumber" class="validation-message"></span>
+            </div>
+            <div class="form-group">
+                <label for="OldPassword">Current Password</label>
+                <input type="password" name="OldPassword" id="OldPassword" class="form-control" required />
+                <span class="validation-message" id="oldPasswordError"></span>
+            </div>
+            <div class="form-group">
+                <label for="NewPassword">New Password</label>
+                <input type="password" name="NewPassword" id="NewPassword" class="form-control" />
+                <span class="validation-message" id="newPasswordError"></span>
+            </div>
+            <div class="form-group">
+                <label for="ConfirmPassword">Confirm New Password</label>
+                <input type="password" name="ConfirmPassword" id="ConfirmPassword" class="form-control" />
+                <span class="validation-message" id="confirmPasswordError"></span>
+            </div>
+            <div class="form-group" style="grid-column: 1 / span 2; display: flex; gap: 16px;">
+                <button type="submit" class="btn-submit" style="flex: 1;">Create Profile</button>
+                <a href="@Url.Action("Index", "Home")" class="btn-submit" style="flex: 1; text-align: center; text-decoration: none; background: linear-gradient(90deg, #23232b 0%, #18181b 100%);">Cancel</a>
+            </div>
+        </div>
+    </form>
 </div>
+}
 <script>
     function previewImage(event, id) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        // Validate file type
+        if (!file.type.startsWith('image/')) {
+            alert('Please select an image file');
+            event.target.value = '';
+            return;
+        }
+
+        // Validate file size (max 5MB)
+        if (file.size > 5 * 1024 * 1024) {
+            alert('Image size should be less than 5MB');
+            event.target.value = '';
+            return;
+        }
+
         const reader = new FileReader();
-        reader.onload = function(){
+        reader.onload = function() {
             const output = document.getElementById(id);
             output.src = reader.result;
         };
-        reader.readAsDataURL(event.target.files[0]);
+        reader.readAsDataURL(file);
     }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.querySelector('form');
+        const newPassword = document.getElementById('NewPassword');
+        const confirmPassword = document.getElementById('ConfirmPassword');
+        const oldPassword = document.getElementById('OldPassword');
+
+        form.addEventListener('submit', function(e) {
+            const skillsInput = document.getElementById('SkillsInput').value;
+            document.getElementById('Skills').value = skillsInput;
+
+            // Clear previous error messages
+            document.getElementById('oldPasswordError').textContent = '';
+            document.getElementById('newPasswordError').textContent = '';
+            document.getElementById('confirmPasswordError').textContent = '';
+
+            // Validate old password is provided
+            if (!oldPassword.value) {
+                e.preventDefault();
+                document.getElementById('oldPasswordError').textContent = 'Please enter your current password';
+                return;
+            }
+
+            // If new password is provided, validate it
+            if (newPassword.value) {
+                if (newPassword.value.length < 6) {
+                    e.preventDefault();
+                    document.getElementById('newPasswordError').textContent = 'Password must be at least 6 characters long';
+                    return;
+                }
+
+                if (newPassword.value !== confirmPassword.value) {
+                    e.preventDefault();
+                    document.getElementById('confirmPasswordError').textContent = 'Passwords do not match';
+                    return;
+                }
+            }
+        });
+    });
 </script>
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 } 

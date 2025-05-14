@@ -16,10 +16,12 @@ namespace Models
         public string Content { get; set; }
         [ForeignKey("ArtistProfile")]
         public int PostedBy { get; set; } // FK to Admin (User)
-        public DateTime PostedAt { get; set; }
+        public DateTime PostedAt { get; set; } = DateTime.Now;
 
 
-        public ArtistProfile ArtistProfile { get; set; }
-        
+        public virtual ArtistProfile? ArtistProfile { get; set; }
+        public virtual ICollection<Like>? Likes { get; set; }
+        public virtual ICollection<Comment>? Comments { get; set; }
+
     }
 }

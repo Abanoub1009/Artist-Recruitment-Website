@@ -4,7 +4,7 @@ using DAL;
 using DAL.Data;
 using DAL.Repository;
 using DAL.Repository.IRepository;
-using DAL.UnitOfWork;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Models;
@@ -13,19 +13,18 @@ using System.Threading.Tasks.Dataflow;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-//Application
-builder.Services.AddScoped<IApplicationRepository, ApplicationRepository>();
-builder.Services.AddScoped<IApplicationService, ApplicationService>();
 //Artist Profile
 builder.Services.AddScoped<IArtistProfileService, ArtistProfileService>();
 builder.Services.AddScoped<IArtistProfileRepository, ArtistProfileRepository>();
 //Blog Post
 builder.Services.AddScoped<IBlogPostService, BlogPostService>();
 builder.Services.AddScoped<IBlogPostRepository, BlogPostRepository>();
-//JobPost
-builder.Services.AddScoped<IJobPostRepository, JobPostRepository>();
-builder.Services.AddScoped<IJobPostService, JobPostService>();
-builder.Services.AddScoped<IUnitOfWork, UnitOFWork>();
+//Portifolo
+builder.Services.AddScoped<IPortfolioItemRepository, PortfolioItemRepository>();
+builder.Services.AddScoped<IPortfolioItemService, PortfolioItemService>();
+//Reviews
+builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
+builder.Services.AddScoped<IReviewService, ReviewService>();
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<AppDbContext>(
@@ -33,7 +32,16 @@ builder.Services.AddDbContext<AppDbContext>(
 
 
 builder.Services.AddIdentity<User, Role>().AddEntityFrameworkStores<AppDbContext>();
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie();
 builder.Services.AddSignalR();
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/User/LoginSignup";
+    options.AccessDeniedPath = "/User/LoginSignup";
+    options.SlidingExpiration = true;
+    options.ExpireTimeSpan = TimeSpan.FromDays(7);
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -50,7 +58,7 @@ app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
-app.MapHub<ChatHub>("/chatHub");
+
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");

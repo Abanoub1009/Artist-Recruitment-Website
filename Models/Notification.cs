@@ -18,7 +18,7 @@ namespace Models
         public bool IsRead { get; set; }
         public DateTime CreatedAt { get; set; }
 
-        public ArtistProfile ArtistProfile { get; set; }
+        public virtual ArtistProfile ArtistProfile { get; set; }
 
     }
 }

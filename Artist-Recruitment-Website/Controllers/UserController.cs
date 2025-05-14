@@ -2,6 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Models.Dtos;
 using Models;
+using BL.Services.Interface;
+using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace Artist_Recruitment_Website.Controllers
 {
@@ -10,12 +13,18 @@ namespace Artist_Recruitment_Website.Controllers
         private readonly UserManager<User> userManager;
         private readonly RoleManager<Role> roleManager;
         private readonly SignInManager<User> signInManager;
+        //private readonly IArtistProfileService _artistProfileService;
 
-        public UserController(UserManager<User> userManager, RoleManager<Role> roleManager, SignInManager<User> signInManager)
+        public UserController(
+            UserManager<User> userManager, 
+            RoleManager<Role> roleManager, 
+            SignInManager<User> signInManager,
+            IArtistProfileService artistProfileService)
         {
             this.userManager = userManager;
             this.roleManager = roleManager;
             this.signInManager = signInManager;
+            //this._artistProfileService = artistProfileService;
         }
 
         // GET: /User/Register or /User/Login
@@ -33,7 +42,12 @@ namespace Artist_Recruitment_Website.Controllers
             var result = await signInManager.PasswordSignInAsync(login.Email, login.Password, login.remmberMe, false);
 
             if (result.Succeeded)
+            {
+                // Check if user has an artist profile
+                var user = await userManager.FindByEmailAsync(login.Email);
+                
                 return RedirectToAction("Index", "Home");
+            }
 
             ModelState.AddModelError("", "Invalid login attempt.");
             return View("LoginSignup");
@@ -44,8 +58,23 @@ namespace Artist_Recruitment_Website.Controllers
         {
             if (!ModelState.IsValid)
             {
-                Console.WriteLine("hello");
                 return View("_RegisterPartial", register);
+            }
+
+            // Check if email already exists
+            var existingUserByEmail = await userManager.FindByEmailAsync(register.Email);
+            if (existingUserByEmail != null)
+            {
+                ModelState.AddModelError("Email", "This email is already registered.");
+                return View("LoginSignup", register);
+            }
+
+            // Check if phone number already exists
+            var existingUserByPhone = await userManager.Users.FirstOrDefaultAsync(u => u.PhoneNumber == register.PhoneNumber);
+            if (existingUserByPhone != null)
+            {
+                ModelState.AddModelError("PhoneNumber", "This phone number is already registered.");
+                return View("LoginSignup", register);
             }
 
             var user = new User
@@ -62,7 +91,9 @@ namespace Artist_Recruitment_Website.Controllers
             if (result.Succeeded)
             {
                 await signInManager.SignInAsync(user, false);
-                return RedirectToAction("Index", "Home");
+
+                // Redirect to Create ArtistProfile after successful registration
+                return RedirectToAction("Create", "ArtistProfile");
             }
 
             foreach (var error in result.Errors)
@@ -73,12 +104,10 @@ namespace Artist_Recruitment_Website.Controllers
             return View("LoginSignup");
         }
 
-
-
         public async Task<IActionResult> SignOut()
         {
             await signInManager.SignOutAsync();
-            return RedirectToAction("LoginSignup");
+            return RedirectToAction("Index", "Home");
         }
 
         public IActionResult Index()

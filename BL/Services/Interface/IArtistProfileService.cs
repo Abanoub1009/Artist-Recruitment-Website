@@ -14,5 +14,6 @@ namespace BL.Services.Interface
         Task AddAsync(ArtistProfile artistProfile);
         Task EditAsync(ArtistProfile artistProfile);
         Task DeleteAsync(int id);
+        Task<ArtistProfile> GettByIdAsync(int id);
     }
 }

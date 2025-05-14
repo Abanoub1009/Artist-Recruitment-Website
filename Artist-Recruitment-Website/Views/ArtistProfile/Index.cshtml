@@ -103,13 +103,16 @@
 </style>
 <div class="container">
     <div class="header">Artist Profiles</div>
-    <a class="add-btn" asp-action="Create">+ Add New Artist</a>
+    <form asp-controller="ArtistProfile" asp-action="Index" method="get" style="margin-bottom:32px; text-align:center;">
+        <input type="text" name="search" placeholder="Search by full name..." value="@ViewBag.Search" style="padding:8px 16px; border-radius:8px; border:1px solid #ccc; width:250px; font-size:1rem; margin-right:8px;" />
+        <button type="submit" class="add-btn" style="display:inline-block; margin:0;">Search</button>
+    </form>
     <div class="artist-list">
         @foreach (var artist in Model)
         {
             <div class="artist-card">
                 <img class="artist-img" src="@artist.ProfileImage" alt="Profile Image" onerror="this.src='/images/default-profile.png'" />
-                <div class="artist-name">@artist.User?.UserName</div>
+                <div class="artist-name">@artist.User.FullName</div>
                 <div class="artist-bio">@artist.Bio</div>
                 <div class="artist-location">@artist.Location</div>
                 <a class="details-link" asp-action="Details" asp-route-id="@artist.ArtistProfileId">View Details</a>

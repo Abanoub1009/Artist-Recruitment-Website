@@ -11,14 +11,12 @@ namespace Models
     {
         [Key]
         public int ReviewId { get; set; }
-        public int ReviewerId { get; set; }
-        public int ReviewedUserId { get; set; }
         public int Rating { get; set; }
         public string Comment { get; set; }
-        public DateTime CreatedAt { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
 
         public int ArtistProfileId { get; set; }
-        public ArtistProfile ArtistProfile { get; set; }
+        public virtual ArtistProfile? ArtistProfile { get; set; }
 
     }
 }

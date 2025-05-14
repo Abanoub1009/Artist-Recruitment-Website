@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,8 +20,8 @@ namespace Models
         [Required]
         public string Type { get; set; }
         public DateTime UploadedAt { get; set; } = DateTime.Now;
-        [Required]
         public int ArtistProfileId { get; set; }
-        public ArtistProfile ArtistProfile { get; set; }
+        [ForeignKey("ArtistProfileId")]
+        public virtual ArtistProfile? ArtistProfile { get; set; }
     }
 }

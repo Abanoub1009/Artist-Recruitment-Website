@@ -1,7 +1,6 @@
 ﻿using BL.Services.Interface;
 using DAL.Repository;
 using DAL.Repository.IRepository;
-using DAL.UnitOfWork;
 using Models;
 using System;
 using System.Collections.Generic;
@@ -14,17 +13,15 @@ namespace BL.Services
     public class PortfolioItemService : IPortfolioItemService
     {
         private readonly IPortfolioItemRepository _portfolioItemRepository;
-        private readonly IUnitOfWork _unitOFWork;
-        public PortfolioItemService(IPortfolioItemRepository portfolioItemRepository, IUnitOfWork unitOFWork)
+        public PortfolioItemService(IPortfolioItemRepository portfolioItemRepository)
         {
             _portfolioItemRepository = portfolioItemRepository;
-            _unitOFWork = unitOFWork;
         }
 
         public async Task AddAsync(PortfolioItem portfolioItem)
         {
             await _portfolioItemRepository.AddAsync(portfolioItem);
-            await _unitOFWork.SaveAsync();
+
         }
 
         public async Task DeleteAsync(int id)
@@ -32,8 +29,7 @@ namespace BL.Services
             var portfolioItem = await _portfolioItemRepository.GetByIdAsync(id);
             if (portfolioItem != null)
             {
-                _portfolioItemRepository.DeleteAsync(portfolioItem);
-                await _unitOFWork.SaveAsync();
+                await _portfolioItemRepository.DeleteAsync(portfolioItem);
             }
         }
 
@@ -50,7 +46,6 @@ namespace BL.Services
         public async Task<PortfolioItem> UpdateStatusAsync(PortfolioItem portfolioItem)
         {
             await _portfolioItemRepository.UpdateAsync(portfolioItem);
-            await _unitOFWork.SaveAsync();
             return portfolioItem;
         }
     }

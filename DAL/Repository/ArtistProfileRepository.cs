@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace DAL.Repository
 {
@@ -14,6 +15,13 @@ namespace DAL.Repository
         public ArtistProfileRepository(AppDbContext context):base(context)
         {
             _context = context;
+        }
+
+        public async Task<ArtistProfile?> GettByIdAsync(int id)
+        {
+            return await _context.ArtistProfiles
+                .Include(ap => ap.User)
+                .FirstOrDefaultAsync(ap => ap.ArtistProfileId == id);
         }
     }
 }

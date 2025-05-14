@@ -10,5 +10,6 @@ namespace DAL.Repository
 {
     public interface IArtistProfileRepository : IRepository<ArtistProfile>
     {
+        Task<ArtistProfile?> GettByIdAsync(int id);
     }
 }

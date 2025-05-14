@@ -2,14 +2,14 @@
 
 namespace Models
 {
+
     public class Like
     {
         public int LikeId { get; set; }
-        public string Username { get; set; }
+        public int BlogPostId { get; set; }
         public DateTime CreatedAt { get; set; }
-        [ForeignKey("JobPost")]
-        public int JobPostId { get; set; }
-        public JobPost  JobPost { get; set; }
-
+        public virtual BlogPost? BlogPost { get; set; }
+        public virtual ArtistProfile? ArtistProfile { get; set; }
+        public int ArtistprofileId { get; set; }
     }
 }

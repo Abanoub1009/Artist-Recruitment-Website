@@ -1,0 +1,229 @@
+﻿@model Models.Review
+
+@{
+    ViewData["Title"] = "Review Details";
+}
+
+<style>
+    .details-page {
+        max-width: 1200px;
+        margin: 2rem auto;
+        padding: 0;
+        background: #1e1e1e;
+        border-radius: 16px;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+        position: relative;
+        overflow: hidden;
+        display: flex;
+    }
+
+    .left-section {
+        width: 40%;
+        background: #f8a4d8;
+        padding: 3rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        border-radius: 16px 0 0 16px;
+    }
+
+    .right-section {
+        width: 60%;
+        padding: 3rem;
+        background: #1e1e1e;
+        border-radius: 0 16px 16px 0;
+    }
+
+    .details-title {
+        font-size: 2.4rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: white;
+        text-align: center;
+    }
+
+    .details-subtitle {
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 1.1rem;
+        text-align: center;
+    }
+
+    .review-details {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 12px;
+        padding: 2rem;
+        margin-top: 1rem;
+    }
+
+    .rating-display {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1.5rem;
+        padding-bottom: 1.5rem;
+        border-bottom: 1px solid rgba(248, 164, 216, 0.2);
+    }
+
+    .rating-stars {
+        color: #f8a4d8;
+        font-size: 1.5rem;
+        margin-right: 1rem;
+    }
+
+    .rating-number {
+        color: white;
+        font-size: 1.2rem;
+        font-weight: 500;
+    }
+
+    .review-meta {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+        padding-bottom: 1.5rem;
+        border-bottom: 1px solid rgba(248, 164, 216, 0.2);
+    }
+
+    .meta-item {
+        color: rgba(255, 255, 255, 0.7);
+    }
+
+    .meta-label {
+        font-size: 0.9rem;
+        margin-bottom: 0.3rem;
+    }
+
+    .meta-value {
+        color: white;
+        font-size: 1rem;
+    }
+
+    .review-comment {
+        color: white;
+        line-height: 1.6;
+        margin-bottom: 2rem;
+    }
+
+    .comment-label {
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .comment-text {
+        color: white;
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 1rem;
+        margin-top: 2rem;
+    }
+
+    .btn-action {
+        flex: 1;
+        padding: 1rem;
+        border: none;
+        border-radius: 8px;
+        font-size: 1.1rem;
+        font-weight: 500;
+        text-decoration: none;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .btn-edit {
+        background: #f8a4d8;
+        color: white;
+    }
+
+    .btn-back {
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+    }
+
+    .btn-action:hover {
+        transform: translateY(-2px);
+    }
+
+    .btn-edit:hover {
+        background: #f591d1;
+        box-shadow: 0 4px 15px rgba(248, 164, 216, 0.3);
+    }
+
+    .btn-back:hover {
+        background: rgba(255, 255, 255, 0.15);
+    }
+
+    /* Responsive adjustments */
+    @@media (max-width: 768px) {
+        .details-page {
+            flex-direction: column;
+        }
+
+        .left-section {
+            width: 100%;
+            padding: 2rem;
+            border-radius: 16px 16px 0 0;
+        }
+
+        .right-section {
+            width: 100%;
+            padding: 2rem;
+            border-radius: 0 0 16px 16px;
+        }
+
+        .review-meta {
+            grid-template-columns: 1fr;
+        }
+
+        .action-buttons {
+            flex-direction: column;
+        }
+    }
+</style>
+
+<div class="details-page">
+    <div class="left-section">
+        <h1 class="details-title">Review Details</h1>
+        <p class="details-subtitle">View the complete feedback</p>
+    </div>
+
+    <div class="right-section">
+        <div class="review-details">
+            <div class="rating-display">
+                <div class="rating-stars">
+                    @for (int i = 0; i < Model.Rating; i++)
+                    {
+                        <span>★</span>
+                    }
+                    @for (int i = Model.Rating; i < 5; i++)
+                    {
+                        <span style="color: rgba(248, 164, 216, 0.3)">★</span>
+                    }
+                </div>
+                <span class="rating-number">@Model.Rating out of 5</span>
+            </div>
+
+            <div class="review-meta">
+                <div class="meta-item">
+                    <div class="meta-label">Date Created</div>
+                    <div class="meta-value">@Model.CreatedAt.ToShortDateString()</div>
+                </div>
+            </div>
+
+            <div class="review-comment">
+                <div class="comment-label">Feedback</div>
+                <p class="comment-text">@Model.Comment</p>
+            </div>
+
+            <div class="action-buttons">
+                <a asp-action="Index" asp-route-id="@Model.ArtistProfileId" class="btn-action btn-back">Back to List</a>
+            </div>
+        </div>
+    </div>
+</div>

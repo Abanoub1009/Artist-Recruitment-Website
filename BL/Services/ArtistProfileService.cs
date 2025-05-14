@@ -42,7 +42,12 @@ namespace BL.Services
 
         public async Task<ArtistProfile> GetByIdAsync(int id)
         {
-            var artist = await _repo.GetByIdAsync(id);
+            var artist = await _repo.GettByIdAsync(id);
+            return artist;
+        }
+        public async Task<ArtistProfile> GettByIdAsync(int id)
+        {
+            var artist = await _repo.GettByIdAsync(id);
             return artist;
         }
     }

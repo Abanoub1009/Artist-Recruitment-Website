@@ -1,0 +1,239 @@
+﻿@model Models.Review
+
+@{
+
+    ViewData["Title"] = "Create Review";
+    var currentUserArtistProfileId = User.FindFirst("ArtistProfile")?.Value;
+    var isOwner = currentUserArtistProfileId != null && Model.ArtistProfileId.ToString() == currentUserArtistProfileId;
+
+}
+
+<style>
+    .review-creation-page {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0;
+    background: #1e1e1e;
+    border-radius: 16px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    }
+
+    .left-section {
+    width: 40%;
+    background: #f8a4d8;
+    padding: 3rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 16px 0 0 16px;
+    }
+
+    .right-section {
+    width: 60%;
+    padding: 3rem;
+    background: #1e1e1e;
+    border-radius: 0 16px 16px 0;
+    }
+
+    .review-header {
+    text-align: center;
+    margin-bottom: 2rem;
+    color: white;
+    }
+
+    .review-title {
+    font-size: 2.4rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: white;
+    }
+
+    .review-subtitle {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1.1rem;
+    }
+
+    .review-form {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    }
+
+    .form-group {
+    margin-bottom: 1rem;
+    }
+
+    .form-group.full-width {
+    grid-column: span 1;
+    }
+
+    .form-group.hidden {
+    display: none;
+    }
+
+    .form-label {
+    display: block;
+    color: #ffffff;
+    font-weight: 500;
+    margin-bottom: 0.8rem;
+    font-size: 1rem;
+    }
+
+    .form-control {
+    width: 100%;
+    padding: 1rem;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    font-size: 1rem;
+    color: white !important;
+    background-color: rgba(255, 255, 255, 0.05);
+    transition: all 0.3s ease;
+    }
+
+    .form-control:focus {
+    border-color: #f8a4d8;
+    background-color: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 0 3px rgba(248, 164, 216, 0.1);
+    outline: none;
+    color: white !important;
+    }
+
+    .form-control::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+    }
+
+    input[type="number"].form-control {
+    color: white !important;
+    -webkit-text-fill-color: white;
+    }
+
+    .rating-input {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    }
+
+    .rating-input input {
+    width: 120px;
+    }
+
+    .rating-label {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.9rem;
+    }
+
+    textarea.form-control {
+    min-height: 150px;
+    resize: vertical;
+    }
+
+    .submit-section {
+    margin-top: 1.5rem;
+    display: flex;
+    gap: 1rem;
+    }
+
+    .btn {
+    flex: 1;
+    padding: 1rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    text-decoration: none;
+    }
+
+    .btn-submit-review {
+    background: #f8a4d8;
+    color: white;
+    }
+
+    .btn-submit-review:hover {
+    background: #f591d1;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(248, 164, 216, 0.3);
+    }
+
+    .btn-cancel {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    }
+
+    .btn-cancel:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-2px);
+    }
+
+    /* Responsive adjustments */
+    @@media (max-width: 768px) {
+    .review-creation-page {
+    flex-direction: column;
+    }
+
+    .left-section {
+    width: 100%;
+    padding: 2rem;
+    border-radius: 16px 16px 0 0;
+    }
+
+    .right-section {
+    width: 100%;
+    padding: 2rem;
+    border-radius: 0 0 16px 16px;
+    }
+
+    .submit-section {
+    flex-direction: column;
+    }
+    }
+</style>
+@if (!isOwner)
+{
+
+    <div class="review-creation-page">
+        <div class="left-section">
+            <h1 class="review-title">Share Your Experience</h1>
+            <p class="review-subtitle">Your feedback helps maintain quality and trust in our artist community</p>
+        </div>
+
+        <div class="right-section">
+            <form asp-action="Create" method="post" class="review-form">
+                <input type="hidden" asp-for="ArtistProfileId" value="@ViewBag.ArtistProfileId" />
+                <input type="hidden" asp-for="CreatedAt" />
+
+                <div class="form-group">
+                    <label class="form-label">Rating</label>
+                    <div class="rating-input">
+                        <input asp-for="Rating" class="form-control" type="number" min="1" max="5" placeholder="1-5" required />
+                        <span class="rating-label">1 = Poor, 5 = Excellent</span>
+                    </div>
+                    <span asp-validation-for="Rating" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Feedback</label>
+                    <textarea asp-for="Comment" class="form-control" required
+                    placeholder="Please provide specific details about your experience working with this artist..."></textarea>
+                    <span asp-validation-for="Comment" class="text-danger"></span>
+                </div>
+
+                <div class="submit-section">
+                    <button type="submit" class="btn btn-submit-review">Submit Review</button>
+                    <a asp-controller="ArtistProfile" asp-action="Details" asp-route-id="@Model.ArtistProfileId" class="btn btn-cancel">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+}
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

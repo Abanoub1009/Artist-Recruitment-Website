@@ -1,0 +1,122 @@
+﻿@using Models
+@model PortfolioItem
+
+@{
+    ViewData["Title"] = "Edit Artwork";
+    var currentUserArtistProfileId = User.FindFirst("ArtistProfile")?.Value;
+    var isOwner = currentUserArtistProfileId != null && Model.ArtistProfileId.ToString() == currentUserArtistProfileId;
+}
+
+<link rel="stylesheet" href="/css/portfolio-item.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+@if(isOwner){
+<div class="portfolio-form-container">
+    <div class="form-header">
+        <h1>@ViewData["Title"]</h1>
+        <a asp-action="Index" class="btn-back">
+            <i class="fas fa-arrow-left"></i> Back to List
+        </a>
+    </div>
+
+    <form asp-action="Edit" enctype="multipart/form-data" class="portfolio-form">
+        <input type="hidden" asp-for="PortfolioItemId" />
+        <input type="hidden" asp-for="ArtistProfileId" />
+        <div asp-validation-summary="ModelOnly" class="validation-error"></div>
+
+        <div class="form-group">
+            <label asp-for="Title">Artwork Title</label>
+            <input asp-for="Title" class="form-control" placeholder="Enter artwork title" />
+            <span asp-validation-for="Title" class="validation-error"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Type">Artwork Type</label>
+            <select asp-for="Type" class="form-control">
+                <option value="">Select artwork type</option>
+                <option value="Painting">Painting</option>
+                <option value="Photography">Photography</option>
+                <option value="Sculpture">Sculpture</option>
+                <option value="Design">Design</option>
+                <option value="Digital Art">Digital Art</option>
+            </select>
+            <span asp-validation-for="Type" class="validation-error"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Description">Description</label>
+            <textarea asp-for="Description" class="form-control" rows="5" placeholder="Enter detailed description of your artwork"></textarea>
+            <span asp-validation-for="Description" class="validation-error"></span>
+        </div>
+
+        <div class="form-group">
+            <label>Current Image</label>
+            <img src="@Model.MediaUrl" alt="@Model.Title" class="current-image" />
+        </div>
+
+        <div class="form-group">
+            <label asp-for="MediaUrl">Current Artwork Image</label>
+            @if (!string.IsNullOrEmpty(Model.MediaUrl))
+            {
+                <div>
+                    <img src="@Model.MediaUrl" alt="Current Image" style="max-width:200px;max-height:200px;" />
+                </div>
+            }
+        </div>
+
+        <div class="form-group" id="fileInputGroup">
+            <label asp-for="MediaUrl">Upload New Image</label>
+            <input type="file" id="Media" name="Media" class="form-control" accept="image/*" />
+            <label for="Media" class="file-upload-label">
+                <i class="fas fa-cloud-upload-alt file-upload-icon"></i>
+                <span class="file-upload-text">Choose an artwork image</span>
+                <span class="file-upload-hint">Click to upload (JPG, PNG up to 5MB)</span>
+                <span class="file-name"></span>
+            </label>
+            <span asp-validation-for="MediaUrl" class="validation-error"></span>
+        </div>
+
+        <!-- Hidden input to send the current image URL -->
+        <input type="hidden" asp-for="MediaUrl" value="@Model.MediaUrl" />
+
+        <button type="submit" class="btn-submit">
+            <i class="fas fa-save"></i> Save Changes
+        </button>
+    </form>
+</div>
+}
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        document.getElementById('Media').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            const fileName = document.querySelector('.file-name');
+            const preview = document.querySelector('.file-preview');
+
+            if (file) {
+                // Show file name
+                fileName.textContent = file.name;
+
+                // Show preview
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                }
+                reader.readAsDataURL(file);
+            } else {
+                fileName.textContent = '';
+                preview.style.display = 'none';
+            }
+        });
+    </script>
+}
+
+<style>
+    .current-image {
+        max-width: 100%;
+        height: auto;
+        border-radius: var(--border-radius);
+        margin-top: 8px;
+    }
+</style>

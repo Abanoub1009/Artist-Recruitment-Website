@@ -1,6 +1,7 @@
 ﻿@{
     ViewData["Title"] = "Login / Signup";
-    Layout = null;
+     Layout = null;
+    var showRegister = ViewBag.ShowRegister as bool? ?? false;
 }
 
 <link rel="stylesheet" href="/css/SignUp_LogIn_Form.css">
@@ -12,7 +13,7 @@
     @* </div> *@
 
     <!-- Login Form -->
-    <div class="form-box login">
+    <div class="form-box login" >
         @await Html.PartialAsync("_LoginPartial", new Models.Dtos.Login())
     </div>
 

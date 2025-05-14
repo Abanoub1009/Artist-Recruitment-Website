@@ -1,0 +1,94 @@
+@using Models
+@model BlogPost
+
+@{
+    ViewData["Title"] = "Edit Blog Post";
+    var artist = User.FindFirst("ArtistProfile");
+    var id = Convert.ToInt32(artist);
+}
+
+<link rel="stylesheet" href="~/css/job-post.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+
+<div class="job-form">
+    <h1 class="text-center" style="color: var(--text-primary-dark); margin-bottom: 30px;">Edit Blog Post</h1>
+
+    <form asp-action="Edit" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="BlogPostId" />
+        <input type="hidden" asp-for="PostedBy"/>
+
+        <div class="form-group">
+            <label asp-for="Title">Title</label>
+            <input asp-for="Title" class="form-control" placeholder="Enter blog title" required />
+            <span asp-validation-for="Title" class="validation-error"></span>
+        </div>
+
+        <div class="form-group">
+            <label>Content</label>
+            <div id="editor" style="height: 400px; margin-bottom: 20px; border-radius: 10px; overflow: hidden;"></div>
+            <input type="hidden" asp-for="Content" id="blogContent" />
+            <span asp-validation-for="Content" class="validation-error"></span>
+        </div>
+
+        <div class="form-actions" style="display: flex; gap: 15px; margin-top: 30px;">
+            <a asp-action="Index" class="btn-action btn-view" style="flex: 1; text-align: center;">
+                <i class="fas fa-arrow-left"></i> Back to List
+            </a>
+            <button type="submit" class="btn-create-job" style="flex: 2;" onclick="prepareSubmit(event)">
+                <i class="fas fa-save"></i> Save Changes
+            </button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+    <script>
+        var quill = new Quill('#editor', {
+            theme: 'snow',
+            modules: {
+                toolbar: [
+                    [{ 'header': [1, 2, 3, false] }],
+                    ['bold', 'italic', 'underline', 'strike'],
+                    ['blockquote', 'code-block'],
+                    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                    [{ 'script': 'sub'}, { 'script': 'super' }],
+                    [{ 'color': [] }, { 'background': [] }],
+                    ['link', 'image'],
+                    ['clean']
+                ]
+            },
+            placeholder: 'Write your blog post here...',
+        });
+
+        // Set initial content
+        quill.root.innerHTML = document.getElementById('blogContent').value;
+
+        // Set theme colors
+        document.querySelector('.ql-toolbar').style.backgroundColor = '#374151';
+        document.querySelector('.ql-toolbar').style.border = '1px solid #4B5563';
+        document.querySelector('.ql-toolbar button').style.color = '#F9FAFB';
+        document.querySelector('.ql-editor').style.backgroundColor = '#1F2937';
+        document.querySelector('.ql-editor').style.color = '#F9FAFB';
+        document.querySelector('.ql-container').style.border = '1px solid #4B5563';
+
+        function prepareSubmit(event) {
+            event.preventDefault();
+            // Get the HTML content from Quill
+            var content = quill.root.innerHTML;
+            // Set the content to the hidden input
+            document.getElementById('blogContent').value = content;
+            // Submit the form
+            document.getElementById('blogForm').submit();
+        }
+
+        // Add animation to the form
+        document.querySelectorAll('.form-group').forEach((group, index) => {
+            group.style.opacity = '0';
+            group.style.animation = `fadeIn 0.5s ease-out forwards ${index * 0.1}s`;
+        });
+    </script>
+} 

@@ -1,0 +1,226 @@
+﻿@model Models.PortfolioItem
+@{
+    ViewData["Title"] = "Artwork Details";
+    var currentUserArtistProfileId = User.FindFirst("ArtistProfile")?.Value;
+    var isOwner = currentUserArtistProfileId != null && Model.ArtistProfileId.ToString() == currentUserArtistProfileId;
+}
+
+<div class="portfolio-detail-container">
+    <div class="detail-header">
+        <img src="@Model.MediaUrl" class="detail-image" alt="@Model.Title">
+        <span class="artwork-type">@Model.Type</span>
+    </div>
+
+    <div class="detail-content">
+        <h1>@Model.Title</h1>
+
+        <div class="meta-info">
+            <div class="meta-item">
+                <i class="fas fa-user"></i>
+                <span>Artist: @Model.ArtistProfile.User.FullName</span>
+            </div>
+            <div class="meta-item">
+                <i class="fas fa-calendar-alt"></i>
+                <span>Upload Date: @Model.UploadedAt.ToString("MM/dd/yyyy")</span>
+            </div>
+        </div>
+
+        <div class="description-container">
+            <h3>Description:</h3>
+            <p>@Model.Description</p>
+        </div>
+        
+        <div class="action-buttons">
+            @if (isOwner)
+            {
+                <a asp-action="Edit" asp-route-id="@Model.PortfolioItemId" class="btn-edit">
+                    <i class="fas fa-edit"></i> Edit Artwork
+                </a>
+            }
+            <a asp-action="Index" asp-route-id="@Model.ArtistProfileId" class="btn-back">
+                <i class="fas fa-arrow-left"></i> Back to List
+            </a>
+        </div>
+    </div>
+</div>
+
+<style>
+    :root {
+        --primary-color: #6c5ce7;
+        --secondary-color: #a29bfe;
+        --dark-color: #2d3436;
+        --light-color: #f8f9fa;
+        --border-radius: 10px;
+        --box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .portfolio-detail-container {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        max-width: 900px;
+        margin: 0 auto;
+        background: white;
+        border-radius: var(--border-radius);
+        box-shadow: var(--box-shadow);
+        overflow: hidden;
+        direction: ltr;
+    }
+
+    .detail-header {
+        position: relative;
+        height: 400px;
+    }
+
+    .detail-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .artwork-type {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background-color: var(--primary-color);
+        color: white;
+        padding: 5px 20px;
+        border-radius: 20px;
+        font-size: 0.9rem;
+    }
+
+    .detail-content {
+        padding: 25px;
+    }
+
+    .detail-content h1 {
+        margin: 0 0 15px 0;
+        color: var(--dark-color);
+        font-size: 1.8rem;
+    }
+
+    .meta-info {
+        display: flex;
+        gap: 30px;
+        margin-bottom: 25px;
+    }
+
+    .meta-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: #555;
+    }
+
+    .meta-item i {
+        color: var(--primary-color);
+    }
+
+    .description-container {
+        margin-bottom: 30px;
+    }
+
+    .description-container h3 {
+        color: var(--dark-color);
+        margin-bottom: 10px;
+    }
+
+    .description-container p {
+        color: #555;
+        line-height: 1.8;
+        font-size: 1.05rem;
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 15px;
+        padding-top: 20px;
+        border-top: 1px solid #eee;
+    }
+
+    .btn-edit {
+        background-color: var(--primary-color);
+        color: white;
+        padding: 12px 25px;
+        border-radius: var(--border-radius);
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        transition: all 0.3s ease;
+    }
+
+    .btn-edit:hover {
+        background-color: #5649c0;
+        transform: translateY(-2px);
+    }
+
+    .btn-back {
+        background-color: white;
+        color: var(--primary-color);
+        border: 1px solid var(--primary-color);
+        padding: 12px 25px;
+        border-radius: var(--border-radius);
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        transition: all 0.3s ease;
+    }
+
+    .btn-back:hover {
+        background-color: #f3f1ff;
+        transform: translateY(-2px);
+    }
+
+    @@media (max-width: 768px) {
+        .detail-header {
+            height: 300px;
+        }
+
+        .detail-content {
+            padding: 20px;
+        }
+
+        .meta-info {
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .action-buttons {
+            flex-direction: column;
+        }
+
+        .btn-edit, .btn-back {
+            justify-content: center;
+        }
+    }
+</style>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Image zoom effect
+            const detailImage = document.querySelector('.detail-image');
+
+            detailImage.addEventListener('click', function() {
+                this.classList.toggle('zoomed');
+
+                if (this.classList.contains('zoomed')) {
+                    document.body.style.overflow = 'hidden';
+                } else {
+                    document.body.style.overflow = '';
+                }
+            });
+
+            // Add animation
+            const detailContainer = document.querySelector('.portfolio-detail-container');
+            detailContainer.style.opacity = '0';
+            detailContainer.style.transform = 'translateY(20px)';
+            detailContainer.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+
+            setTimeout(() => {
+                detailContainer.style.opacity = '1';
+                detailContainer.style.transform = 'translateY(0)';
+            }, 100);
+        });
+    </script>
+}

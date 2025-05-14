@@ -1,8 +1,86 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+@{
+    ViewData["Title"] = "Home";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<section class="hero">
+    <div class="hero-content">
+        <h1>Find the Perfect Logo Artist</h1>
+        <p>Connect with top talent for your branding needs or find amazing opportunities as a designer</p>
+    </div>
+</section>
+
+<section class="login-section">
+    <div class="container login-container">
+        <div class="login-info">
+            <h2>Welcome Back</h2>
+            <p>Sign in to access your account and discover new opportunities tailored for you.</p>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-briefcase"></i>
+                    </div>
+                    <h3>Find Jobs</h3>
+                    <p>Browse through hundreds of logo design projects waiting for your creativity.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-palette"></i>
+                    </div>
+                    <h3>Post a Job</h3>
+                    <p>Looking for a logo designer? Post your project and find the perfect match.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="login-form">
+            <h2 style="margin-bottom: 30px; color: var(--text-primary);">Login</h2>
+            <form asp-controller="Account" asp-action="Login" method="post">
+                <div class="form-group">
+                    <label for="username">Username or Email</label>
+                    <input type="text" id="username" name="username" placeholder="Enter your username or email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                </div>
+                
+                <div class="remember-me">
+                    <input type="checkbox" id="remember" name="remember">
+                    <label for="remember">Remember me</label>
+                </div>
+                
+                <button type="submit" class="submit-btn">Login</button>
+            </form>
+        </div>
+    </div>
+</section>
+
+<section class="features">
+    <div class="container">
+        <h2>Why Choose Us</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <h3>Talented Community</h3>
+                <p>Join thousands of skilled logo artists and designers from around the world.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-hand-holding-usd"></i>
+                </div>
+                <h3>Fair Compensation</h3>
+                <p>We ensure fair pay for your creative work with transparent pricing.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <h3>Secure Platform</h3>
+                <p>Your work and payments are protected with our secure system.</p>
+            </div>
+        </div>
+    </div>
+</section> 
