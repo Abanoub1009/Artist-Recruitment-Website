@@ -18,8 +18,7 @@ namespace Artist_Recruitment_Website.Controllers
         public UserController(
             UserManager<User> userManager, 
             RoleManager<Role> roleManager, 
-            SignInManager<User> signInManager,
-            IArtistProfileService artistProfileService)
+            SignInManager<User> signInManager)
         {
             this.userManager = userManager;
             this.roleManager = roleManager;
@@ -27,7 +26,6 @@ namespace Artist_Recruitment_Website.Controllers
             //this._artistProfileService = artistProfileService;
         }
 
-        // GET: /User/Register or /User/Login
         public IActionResult LoginSignup()
         {
             return View();

@@ -9,16 +9,16 @@ namespace Models.Dtos
 {
     public class Register
     {
-        [Required(ErrorMessage ="pleaze enter your name")]
+        [Required(ErrorMessage ="please enter your name")]
         public string FullName { get; set; }
         [EmailAddress(ErrorMessage ="Invalid E-mail")]
         [Required(ErrorMessage ="pleaze provide the e-mail")]
         public string Email { get; set; }
-        [Required(ErrorMessage ="pleaze enter a strong password")]
+        [Required(ErrorMessage ="please enter a strong password")]
         [DataType(DataType.Password)]
         public string Password { get; set; }
         [Display(Name ="re-Type the password")]
-        [Required(ErrorMessage = "pleaze re-type the password")]
+        [Required(ErrorMessage = "please re-type the password")]
         [DataType(DataType.Password)]
         [Compare("Password", ErrorMessage ="Not Matched")]
         public string ConfirmPassword { get; set; }
